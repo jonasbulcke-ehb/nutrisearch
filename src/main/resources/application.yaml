@@ -1,5 +1,5 @@
 spring:
-  profiles.active: "test"
+  profiles.active: "local"
   data:
     mongodb:
       uri: "mongodb+srv://spring-boot:B4OTfcEisNGHBebQ@cluster0.zztf6.mongodb.net/?retryWrites=true&w=majority"

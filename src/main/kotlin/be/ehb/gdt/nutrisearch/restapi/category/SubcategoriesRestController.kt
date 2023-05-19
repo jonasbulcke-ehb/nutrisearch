@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1/categories/{parentId}/subcategories")
-class SubcategoriesController(private val service: SubcategoryService) {
+class SubcategoriesRestController(private val service: SubcategoryService) {
     @GetMapping
     fun getSubcategories(@PathVariable parentId: String) = ResponseEntity.ok(service.getSubcategories(parentId))
 

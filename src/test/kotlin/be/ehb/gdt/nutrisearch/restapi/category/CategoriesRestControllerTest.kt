@@ -10,7 +10,6 @@ import org.mockito.Mockito.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
@@ -18,9 +17,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.util.ResourceUtils
 
-@WebMvcTest
-@ContextConfiguration(classes = [CategoriesController::class])
-class CategoriesControllerTest {
+@WebMvcTest(controllers = [CategoriesRestController::class])
+class CategoriesRestControllerTest {
     private val id = "cat2"
     private val name = "Graanproducten"
     private val subcategories = mutableListOf(Subcategory("Cornflakes", "cat2sub1"), Subcategory("Brood", "cat2sub2"))
