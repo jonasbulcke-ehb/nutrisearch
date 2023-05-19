@@ -9,15 +9,13 @@ import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.util.ResourceUtils
 
-@WebMvcTest
-@ContextConfiguration(classes = [SubcategoriesRestController::class])
+@WebMvcTest(controllers = [SubcategoriesRestController::class])
 class SubcategoriesRestControllerTest {
     private val parentId = "cat2"
     private val id = "cat2sub2"
