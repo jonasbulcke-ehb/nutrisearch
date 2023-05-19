@@ -4,7 +4,6 @@ import be.ehb.gdt.nutrisearch.domain.category.entities.Category
 import be.ehb.gdt.nutrisearch.domain.category.entities.Subcategory
 import be.ehb.gdt.nutrisearch.domain.category.exceptions.CategoryNotFoundException
 import be.ehb.gdt.nutrisearch.domain.category.services.CategoryService
-import be.ehb.gdt.nutrisearch_api.controllers.CategoriesController
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
