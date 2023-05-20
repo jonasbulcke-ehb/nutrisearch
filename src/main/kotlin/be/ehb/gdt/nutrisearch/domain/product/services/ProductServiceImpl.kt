@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service
 class ProductServiceImpl(val repo: ProductRepository) : ProductService {
     override fun getProducts() = repo.findAllProducts()
 
-    override fun getProduct(id: String) = repo.findProductById(id)
+    override fun getProduct(id: String): Product {
+        return repo.findProductById(id) ?: throw ProductNotFoundException(id)
+    }
 
     override fun createProduct(product: Product) = repo.saveProduct(product)
 
