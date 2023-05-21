@@ -13,5 +13,6 @@ class Consumption(
     val preparation: Preparation,
     val amount: Int,
     val timestamp: LocalDateTime,
+    val ownerId: String,
     @Id val id: String = ObjectId.get().toHexString()
 )

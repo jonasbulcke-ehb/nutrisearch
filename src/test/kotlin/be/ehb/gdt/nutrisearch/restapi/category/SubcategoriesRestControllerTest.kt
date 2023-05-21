@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.web.servlet.MockMvc
@@ -16,6 +17,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.util.ResourceUtils
 
 @WebMvcTest(controllers = [SubcategoriesRestController::class])
+@AutoConfigureMockMvc(addFilters = false)
 class SubcategoriesRestControllerTest {
     private val parentId = "cat2"
     private val id = "cat2sub2"
