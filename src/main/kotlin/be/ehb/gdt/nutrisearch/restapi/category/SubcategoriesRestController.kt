@@ -1,41 +1,31 @@
 package be.ehb.gdt.nutrisearch.restapi.category
 
 import be.ehb.gdt.nutrisearch.domain.category.services.SubcategoryService
-import org.springframework.http.ResponseEntity
+import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1/categories/{parentId}/subcategories")
 class SubcategoriesRestController(private val service: SubcategoryService) {
     @GetMapping
-    fun getSubcategories(@PathVariable parentId: String) = ResponseEntity.ok(service.getSubcategories(parentId))
+    fun getSubcategories(@PathVariable parentId: String) = service.getSubcategories(parentId)
 
     @GetMapping("/{id}")
     fun getSubcategory(@PathVariable parentId: String, @PathVariable id: String) =
-        ResponseEntity.ok(service.getSubcategory(parentId, id))
+        service.getSubcategory(parentId, id)
 
     @PostMapping
-    fun postSubcategory(
-        @PathVariable parentId: String,
-        @RequestParam name: String,
-    ): ResponseEntity<Unit> {
+    @ResponseStatus(HttpStatus.CREATED)
+    fun postSubcategory(@PathVariable parentId: String, @RequestParam name: String) =
         service.createSubcategory(parentId, name)
-        return ResponseEntity.noContent().header("Content-Type").build()
-    }
 
     @PutMapping("/{id}")
-    fun putSubcategory(
-        @PathVariable parentId: String,
-        @PathVariable id: String,
-        @RequestParam name: String
-    ): ResponseEntity<Unit> {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun putSubcategory(@PathVariable parentId: String, @PathVariable id: String, @RequestParam name: String) =
         service.updateSubcategory(parentId, id, name)
-        return ResponseEntity.noContent().build()
-    }
 
     @DeleteMapping("/{id}")
-    fun deleteSubcategory(@PathVariable parentId: String, @PathVariable id: String): ResponseEntity<Unit> {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun deleteSubcategory(@PathVariable parentId: String, @PathVariable id: String) =
         service.deleteSubcategory(parentId, id)
-        return ResponseEntity.noContent().build()
-    }
 }
