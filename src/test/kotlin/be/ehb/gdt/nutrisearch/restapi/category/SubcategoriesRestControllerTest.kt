@@ -80,10 +80,10 @@ class SubcategoriesRestControllerTest {
     }
 
     @Test
-    fun `when category exists and POST request is sent then status 204 is expected`() {
+    fun `when category exists and POST request is sent then status 201 is expected`() {
         mockMvc.perform(post("/api/v1/categories/{id}/subcategories", parentId).queryParam("name", name))
             .andDo(MockMvcResultHandlers.print())
-            .andExpect(MockMvcResultMatchers.status().isNoContent())
+            .andExpect(MockMvcResultMatchers.status().isCreated())
 
         verify(subcategoryService).createSubcategory(parentId, name)
     }

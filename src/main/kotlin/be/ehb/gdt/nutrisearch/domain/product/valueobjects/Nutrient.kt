@@ -1,4 +1,4 @@
-package be.ehb.gdt.nutrisearch.domain.product.entities
+package be.ehb.gdt.nutrisearch.domain.product.valueobjects
 
 enum class Nutrient(
     val unit: String = "g",

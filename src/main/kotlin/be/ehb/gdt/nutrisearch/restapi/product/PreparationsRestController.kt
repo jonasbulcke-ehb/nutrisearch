@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1/products/{productId}/preparations")
-class PreparationsController(private val service: PreparationService) {
+class PreparationsRestController(private val service: PreparationService) {
     @GetMapping
     fun getPreparations(@PathVariable productId: String) = service.getPreparations(productId)
 
