@@ -9,10 +9,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1/products")
-class ProductsRestController(
-    private val service: ProductService,
-    private val authenticationFacade: AuthenticationFacade
-) {
+class ProductsRestController(private val service: ProductService, private val authFacade: AuthenticationFacade) {
 
     @GetMapping
     fun getProducts() = service.getProducts()
@@ -23,16 +20,16 @@ class ProductsRestController(
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun postProduct(@RequestBody product: Product): Product {
-        val isVerified = authenticationFacade.isInRole("dietitian")
-        val ownerId = authenticationFacade.authentication.name
+        val isVerified = authFacade.isInRole("dietitian")
+        val ownerId = authFacade.authentication.name
         return service.createProduct(isVerified, ownerId, product)
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun putProduct(@PathVariable id: String, @RequestBody product: Product) {
-        val isVerified = authenticationFacade.isInRole("dietitian")
-        val ownerId = authenticationFacade.authentication.name
+        val isVerified = authFacade.isInRole("dietitian")
+        val ownerId = authFacade.authentication.name
         service.updateProduct(id, isVerified, ownerId, product)
     }
 
@@ -42,5 +39,5 @@ class ProductsRestController(
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun deleteProduct(@PathVariable id: String) = service.deleteProduct(id, authenticationFacade.authentication.name)
+    fun deleteProduct(@PathVariable id: String) = service.deleteProduct(id, authFacade.authentication.name)
 }

@@ -5,18 +5,18 @@ import be.ehb.gdt.nutrisearch.domain.product.entities.Preparation
 import be.ehb.gdt.nutrisearch.domain.product.valueobjects.ServingSize
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
-import java.time.LocalDateTime
+import java.util.Date
 
 class Consumption(
     val meal: Meal,
     val product: Product,
     val servingSize: ServingSize,
     val preparation: Preparation,
-    val amount: Int,
-    val timestamp: LocalDateTime,
-    val ownerId: String,
+    val amount: Double,
+    val consumedAt: Date,
     @Id val id: String = ObjectId.get().toHexString()
 ) {
+    lateinit var userInfoId: String
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

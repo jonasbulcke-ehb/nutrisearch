@@ -8,6 +8,6 @@ interface ProductRepository {
     fun saveProduct(product: Product): Product
     fun verifyProduct(id: String)
     fun deleteProductById(id: String)
-    fun existProductById(id: String): Boolean
-    fun belongProductToOwnerId(id: String, ownerId: String): Boolean
+    fun existsProductById(id: String): Boolean
+    fun belongsProductToOwnerId(id: String, ownerId: String): Boolean
 }

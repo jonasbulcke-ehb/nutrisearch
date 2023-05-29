@@ -24,11 +24,11 @@ class ProductServiceImpl(val repo: ProductRepository) : ProductService {
         }
 
     override fun updateProduct(id: String, isVerified: Boolean, ownerId: String, product: Product) {
-        if (!repo.existProductById(id)) {
+        if (!repo.existsProductById(id)) {
             throw ProductNotFoundException(id)
         }
 
-        if (!repo.belongProductToOwnerId(id, ownerId) && !isVerified) {
+        if (!repo.belongsProductToOwnerId(id, ownerId) && !isVerified) {
             throw ForbiddenOperationException("Forbidden to modify product with id $id")
         }
 
@@ -49,11 +49,11 @@ class ProductServiceImpl(val repo: ProductRepository) : ProductService {
     }
 
     override fun deleteProduct(id: String, ownerId: String) {
-        if (!repo.existProductById(id)) {
+        if (!repo.existsProductById(id)) {
             throw ProductNotFoundException(id)
         }
 
-        if (!repo.belongProductToOwnerId(id, ownerId)) {
+        if (!repo.belongsProductToOwnerId(id, ownerId)) {
             throw ForbiddenOperationException("Forbidden to delete product with id $id")
         }
 

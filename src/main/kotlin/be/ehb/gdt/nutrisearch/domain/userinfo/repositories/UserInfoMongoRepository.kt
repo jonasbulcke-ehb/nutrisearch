@@ -16,7 +16,13 @@ class UserInfoMongoRepository(private val mongoTemplate: MongoTemplate) : UserIn
 
     override fun findUserInfoByAuthId(authId: String): UserInfo? {
         val query = Query(Criteria.where("authId").`is`(authId))
-        return mongoTemplate.findOne(query, UserInfo::class.java);
+        return mongoTemplate.findOne(query, UserInfo::class.java)
+    }
+
+    override fun findUserInfoIdByAuthId(authId: String): String? {
+        val query = Query(Criteria.where("authId").`is`(authId))
+        query.fields().include("_id")
+        return mongoTemplate.findOne(query, UserInfo::class.java)?.id
     }
 
     override fun insertUserInfo(userInfo: UserInfo) = mongoTemplate.insert(userInfo)

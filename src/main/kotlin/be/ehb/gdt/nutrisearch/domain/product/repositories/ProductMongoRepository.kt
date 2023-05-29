@@ -32,12 +32,12 @@ class ProductMongoRepository(private val mongoTemplate: MongoTemplate) : Product
         mongoTemplate.remove(query, Category::class.java)
     }
 
-    override fun existProductById(id: String): Boolean {
+    override fun existsProductById(id: String): Boolean {
         val query = Query(Criteria.where("_id").`is`(id))
         return mongoTemplate.exists(query, Category::class.java)
     }
 
-    override fun belongProductToOwnerId(id: String, ownerId: String): Boolean {
+    override fun belongsProductToOwnerId(id: String, ownerId: String): Boolean {
         val query = Query(Criteria.where("_id").`is`(id).and("ownerId").`is`(ownerId))
         return mongoTemplate.exists(query, Category::class.java)
     }
