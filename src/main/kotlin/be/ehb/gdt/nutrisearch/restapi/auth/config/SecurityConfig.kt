@@ -1,4 +1,4 @@
-package be.ehb.gdt.nutrisearch.config
+package be.ehb.gdt.nutrisearch.restapi.auth.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

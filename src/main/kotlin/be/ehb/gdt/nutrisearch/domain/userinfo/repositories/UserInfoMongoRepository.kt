@@ -2,6 +2,7 @@ package be.ehb.gdt.nutrisearch.domain.userinfo.repositories
 
 import be.ehb.gdt.nutrisearch.domain.userinfo.entities.UserInfo
 import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.UserUpdatableInfo
+import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.WeightMeasurement
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
@@ -31,6 +32,12 @@ class UserInfoMongoRepository(private val mongoTemplate: MongoTemplate) : UserIn
             isPregnant?.let { update.set("isPregnant", it) }
             isBreastFeeding?.let { update.set("isBreastFeeding", it) }
         }
+        mongoTemplate.updateFirst(query, update, UserInfo::class.java)
+    }
+
+    override fun insertWeight(authId: String, weightMeasurement: WeightMeasurement) {
+        val query = Query(Criteria.where("authId").`is`(authId))
+        val update = Update().push("weightMeasurements", weightMeasurement)
         mongoTemplate.updateFirst(query, update, UserInfo::class.java)
     }
 

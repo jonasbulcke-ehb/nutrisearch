@@ -2,6 +2,7 @@ package be.ehb.gdt.nutrisearch.restapi.product
 
 import be.ehb.gdt.nutrisearch.domain.product.entities.Preparation
 import be.ehb.gdt.nutrisearch.domain.product.services.PreparationService
+import be.ehb.gdt.nutrisearch.restapi.auth.config.RequiresDietitianRole
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
@@ -17,11 +18,13 @@ class PreparationsRestController(private val service: PreparationService) {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @RequiresDietitianRole
     fun postPreparation(@PathVariable productId: String, @RequestBody preparation: Preparation) =
         service.createPreparation(productId, preparation)
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @RequiresDietitianRole
     fun putPreparation(
         @PathVariable productId: String,
         @PathVariable id: String,
@@ -30,6 +33,7 @@ class PreparationsRestController(private val service: PreparationService) {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @RequiresDietitianRole
     fun deletePreparation(@PathVariable productId: String, @PathVariable id: String) =
         service.deletePreparation(productId, id)
 }

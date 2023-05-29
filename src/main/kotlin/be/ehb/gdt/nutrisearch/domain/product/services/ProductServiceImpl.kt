@@ -1,5 +1,6 @@
 package be.ehb.gdt.nutrisearch.domain.product.services
 
+import be.ehb.gdt.nutrisearch.domain.exceptions.ForbiddenOperationException
 import be.ehb.gdt.nutrisearch.domain.exceptions.ResourceDoesNotMatchIdException
 import be.ehb.gdt.nutrisearch.domain.product.entities.Product
 import be.ehb.gdt.nutrisearch.domain.product.exceptions.ProductNotFoundException
@@ -14,23 +15,46 @@ class ProductServiceImpl(val repo: ProductRepository) : ProductService {
         return repo.findProductById(id) ?: throw ProductNotFoundException(id)
     }
 
-    override fun createProduct(product: Product) = repo.saveProduct(product)
+    override fun createProduct(isVerified: Boolean, ownerId: String, product: Product) =
+        product.apply {
+            this.isVerified = isVerified
+            this.ownerId = ownerId
+        }.also {
+            repo.saveProduct(it)
+        }
 
-    override fun updateProduct(id: String, product: Product) {
-        if(!repo.existProductById(id)) {
+    override fun updateProduct(id: String, isVerified: Boolean, ownerId: String, product: Product) {
+        if (!repo.existProductById(id)) {
             throw ProductNotFoundException(id)
         }
 
-        if(product.id != id) {
+        if (!repo.belongProductToOwnerId(id, ownerId) && !isVerified) {
+            throw ForbiddenOperationException("Forbidden to modify product with id $id")
+        }
+
+        if (product.id != id) {
             throw ResourceDoesNotMatchIdException(product.id, id)
         }
 
-        repo.saveProduct(product)
+        product.apply {
+            this.isVerified = isVerified
+            this.ownerId = ownerId
+        }.also {
+            repo.saveProduct(it)
+        }
     }
 
-    override fun deleteProduct(id: String) {
-        if(!repo.existProductById(id)) {
+    override fun verifyProduct(id: String) {
+        repo.verifyProduct(id)
+    }
+
+    override fun deleteProduct(id: String, ownerId: String) {
+        if (!repo.existProductById(id)) {
             throw ProductNotFoundException(id)
+        }
+
+        if (!repo.belongProductToOwnerId(id, ownerId)) {
+            throw ForbiddenOperationException("Forbidden to delete product with id $id")
         }
 
         repo.deleteProductById(id)

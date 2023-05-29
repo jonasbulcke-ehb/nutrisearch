@@ -1,6 +1,6 @@
 package be.ehb.gdt.nutrisearch.restapi.category
 
-import be.ehb.gdt.nutrisearch.config.RequiresDietitianRole
+import be.ehb.gdt.nutrisearch.restapi.auth.config.RequiresDietitianRole
 import be.ehb.gdt.nutrisearch.domain.category.services.CategoryService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*

@@ -25,7 +25,7 @@ class PreparationServiceImpl(private val repo: PreparationRepository) : Preparat
         return repo.getPreparation(productId, id) ?: throw PreparationNotFoundException(productId, id)
     }
 
-    override fun createPreparation(productId: String, preparation: Preparation): Preparation {
+    override fun createPreparation(productId: String,  preparation: Preparation): Preparation {
         if (!repo.existsProductById(productId)) {
             throw ProductNotFoundException(productId)
         }

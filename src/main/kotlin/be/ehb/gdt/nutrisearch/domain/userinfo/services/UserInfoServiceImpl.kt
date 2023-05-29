@@ -3,8 +3,8 @@ package be.ehb.gdt.nutrisearch.domain.userinfo.services
 import be.ehb.gdt.nutrisearch.domain.userinfo.entities.UserInfo
 import be.ehb.gdt.nutrisearch.domain.userinfo.repositories.UserInfoRepository
 import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.UserUpdatableInfo
+import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.WeightMeasurement
 import org.springframework.stereotype.Service
-import java.lang.RuntimeException
 
 @Service
 class UserInfoServiceImpl(private val repo: UserInfoRepository) : UserInfoService {
@@ -29,6 +29,13 @@ class UserInfoServiceImpl(private val repo: UserInfoRepository) : UserInfoServic
             throw RuntimeException()
         }
         repo.updateUserInfo(authId, userUpdatableInfo)
+    }
+
+    override fun addWeightMeasurement(authId: String, weightMeasurement: WeightMeasurement) {
+        if(!repo.existUserInfoByAuthId(authId)) {
+            throw RuntimeException()
+        }
+        repo.insertWeight(authId, weightMeasurement)
     }
 
     override fun deleteUserInfoByAuthId(authId: String) {

@@ -1,20 +1,23 @@
 package be.ehb.gdt.nutrisearch.domain.userinfo.entities
 
-import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.Weight
+import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.WeightMeasurement
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.index.Indexed
-import java.time.LocalDateTime
+import org.springframework.data.mongodb.core.mapping.Document
+import java.time.LocalDate
+import java.util.*
 
+@Document("user-info")
 class UserInfo(
-    val dob: LocalDateTime,
+    val dob: LocalDate,
     val activityLevel: ActivityLevel,
     val length: Int,
     val sex: Sex,
     val isPregnant: Boolean = false,
     val isBreastFeeding: Boolean = false,
-    val measuredWeights: List<Weight> = listOf(),
+    val weightMeasurementMeasurements: List<WeightMeasurement> = listOf(),
     @Id val id: String = ObjectId.get().toHexString()
 ) {
     @JsonIgnore

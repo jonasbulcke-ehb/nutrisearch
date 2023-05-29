@@ -1,5 +1,6 @@
 package be.ehb.gdt.nutrisearch.domain.consumption.entities
 
+import be.ehb.gdt.nutrisearch.domain.consumption.valueobjects.Product
 import be.ehb.gdt.nutrisearch.domain.product.entities.Preparation
 import be.ehb.gdt.nutrisearch.domain.product.valueobjects.ServingSize
 import org.bson.types.ObjectId
