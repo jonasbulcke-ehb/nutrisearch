@@ -24,7 +24,7 @@ class ConsumptionServiceImpl(
         val userInfoId = getUserInfoId(authId)
         val consumption = consumptionRepo.findConsumptionById(id) ?: throw ConsumptionNotFoundException(id)
         if (consumption.userInfoId != userInfoId) {
-            throw RuntimeException()
+            throw ForbiddenOperationException("Forbidden to retrieve consumption with id $id")
         }
         return consumption
     }

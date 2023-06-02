@@ -21,7 +21,7 @@ class UserInfoMongoRepository(private val mongoTemplate: MongoTemplate) : UserIn
 
     override fun findUserInfoIdByAuthId(authId: String): String? {
         val query = Query(Criteria.where("authId").`is`(authId))
-        query.fields().include("_id")
+//        query.fields().include("_id")
         return mongoTemplate.findOne(query, UserInfo::class.java)?.id
     }
 

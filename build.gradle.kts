@@ -26,6 +26,14 @@ dependencies {
     implementation("org.springframework.security:spring-security-test")
     testImplementation ("org.mockito.kotlin:mockito-kotlin:4.1.0")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring30x:4.6.2")
+    testImplementation("io.cucumber:cucumber-junit:7.12.0")
+    testImplementation("io.cucumber:cucumber-java:7.12.0")
+    testImplementation("io.cucumber:cucumber-spring:7.12.0")
+    testImplementation("io.cucumber:cucumber-core:7.12.0")
+    testImplementation("io.cucumber:cucumber-junit-platform-engine:7.12.0")
+    testImplementation("org.junit.platform:junit-platform-suite:1.9.3")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.3")
 }
 
 tasks.withType<KotlinCompile> {

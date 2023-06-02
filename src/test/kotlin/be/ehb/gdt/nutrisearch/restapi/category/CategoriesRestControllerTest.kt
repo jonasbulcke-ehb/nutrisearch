@@ -8,9 +8,10 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.security.test.context.support.WithMockUser
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
@@ -19,7 +20,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.util.ResourceUtils
 
 @WebMvcTest(controllers = [CategoriesRestController::class])
-@AutoConfigureMockMvc(addFilters = false)
+@WithMockUser
 class CategoriesRestControllerTest {
     private val id = "cat2"
     private val name = "Graanproducten"
@@ -45,7 +46,7 @@ class CategoriesRestControllerTest {
 
         `when`(categoryService.getCategories()).thenReturn(categories)
 
-        mockMvc.perform(get("/api/v1/categories"))
+        mockMvc.perform(get("/api/v1/categories").with(jwt()))
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(content().json(readJsonFromFile("categories/categories.json")))
@@ -57,7 +58,7 @@ class CategoriesRestControllerTest {
     fun `when GET request is sent then status 200 is expected`() {
         `when`(categoryService.getCategory("cat2")).thenReturn(category)
 
-        mockMvc.perform(get("/api/v1/categories/{id}", id))
+        mockMvc.perform(get("/api/v1/categories/{id}", id).with(jwt()))
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(content().json(readJsonFromFile("categories/category.json")))
@@ -69,7 +70,7 @@ class CategoriesRestControllerTest {
     fun `when GET request is sent and category does not exist then status 404 is expected`() {
         `when`(categoryService.getCategory(id)).thenThrow(CategoryNotFoundException::class.java)
 
-        mockMvc.perform(get("/api/v1/categories/{id}", id))
+        mockMvc.perform(get("/api/v1/categories/{id}", id).with(jwt()))
             .andDo(print())
             .andExpect(status().isNotFound())
 
@@ -81,7 +82,7 @@ class CategoriesRestControllerTest {
         val json = "{ 'id': 'id', 'name': '$name' }"
         `when`(categoryService.createCategory(name)).thenReturn(Category(name, id = "id"))
 
-        mockMvc.perform(post("/api/v1/categories").queryParam("name", name))
+        mockMvc.perform(post("/api/v1/categories").queryParam("name", name).with(jwt()))
             .andDo(print())
             .andExpect(status().isCreated())
             .andExpect(content().json(json))
@@ -92,7 +93,7 @@ class CategoriesRestControllerTest {
 
     @Test
     fun `when POST request is invalid then status 400 is expected`() {
-        mockMvc.perform(post("/api/v1/categories"))
+        mockMvc.perform(post("/api/v1/categories").with(jwt()))
             .andDo(print())
             .andExpect(status().isBadRequest())
             .andExpect { assertEquals("Required parameter 'name' is not present.", it.response.errorMessage) }
@@ -102,7 +103,7 @@ class CategoriesRestControllerTest {
 
     @Test
     fun `when category exists and valid PUT request is sent then status 204 expected`() {
-        mockMvc.perform(put("/api/v1/categories/{id}", id).queryParam("name", name))
+        mockMvc.perform(put("/api/v1/categories/{id}", id).queryParam("name", name).with(jwt()))
             .andDo(print())
             .andExpect(status().isNoContent())
 
@@ -113,7 +114,7 @@ class CategoriesRestControllerTest {
     fun `when category does not exists and PUT request is sent then status 404 is expected`() {
         `when`(categoryService.updateCategory(id, name)).thenThrow(CategoryNotFoundException::class.java)
 
-        mockMvc.perform(put("/api/v1/categories/{id}", id).queryParam("name", name))
+        mockMvc.perform(put("/api/v1/categories/{id}", id).queryParam("name", name).with(jwt()))
             .andDo(print())
             .andExpect(status().isNotFound())
 
@@ -122,7 +123,7 @@ class CategoriesRestControllerTest {
 
     @Test
     fun `when category exists and invalid PUT request is sent then status 400 is expected`() {
-        mockMvc.perform(put("/api/v1/categories/{id}", id))
+        mockMvc.perform(put("/api/v1/categories/{id}", id).with(jwt()))
             .andDo(print())
             .andExpect(status().isBadRequest())
             .andExpect { assertEquals("Required parameter 'name' is not present.", it.response.errorMessage) }
@@ -132,7 +133,7 @@ class CategoriesRestControllerTest {
 
     @Test
     fun `when category does exists and DELETE request is sent then status 204 is expected`() {
-        mockMvc.perform(delete("/api/v1/categories/{id}", id))
+        mockMvc.perform(delete("/api/v1/categories/{id}", id).with(jwt()))
             .andDo(print())
             .andExpect(status().isNoContent())
 
@@ -143,7 +144,7 @@ class CategoriesRestControllerTest {
     fun `when category does not exists and DELETE request is sent then status 404 is expected`() {
         `when`(categoryService.deleteCategory(id)).thenThrow(CategoryNotFoundException::class.java)
 
-        mockMvc.perform(delete("/api/v1/categories/{id}", id))
+        mockMvc.perform(delete("/api/v1/categories/{id}", id).with(jwt()))
             .andDo(print())
             .andExpect(status().isNotFound())
 

@@ -5,6 +5,7 @@ import be.ehb.gdt.nutrisearch.domain.product.entities.Preparation
 import be.ehb.gdt.nutrisearch.domain.product.valueobjects.ServingSize
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
+import java.time.LocalDate
 import java.util.Date
 
 class Consumption(
@@ -13,7 +14,7 @@ class Consumption(
     val servingSize: ServingSize,
     val preparation: Preparation,
     val amount: Double,
-    val consumedAt: Date,
+    val consumedAt: LocalDate,
     @Id val id: String = ObjectId.get().toHexString()
 ) {
     lateinit var userInfoId: String

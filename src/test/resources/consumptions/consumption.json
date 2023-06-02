@@ -1,0 +1,16 @@
+{
+  "meal": "Breakfast",
+  "product": {
+    "name": "Cornflakes",
+    "id": "prod-id-cornflakes"
+  },
+  "servingSize": {
+    "name": "Gram",
+    "grams": 1
+  },
+  "preparation": {
+    "name": "Onbereid"
+  },
+  "amount": 35,
+  "consumedAt": "2023-05-30"
+}
