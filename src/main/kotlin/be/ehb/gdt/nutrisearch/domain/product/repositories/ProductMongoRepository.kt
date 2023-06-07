@@ -1,6 +1,5 @@
 package be.ehb.gdt.nutrisearch.domain.product.repositories
 
-import be.ehb.gdt.nutrisearch.domain.category.entities.Category
 import be.ehb.gdt.nutrisearch.domain.product.entities.Product
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
@@ -29,16 +28,16 @@ class ProductMongoRepository(private val mongoTemplate: MongoTemplate) : Product
 
     override fun deleteProductById(id: String) {
         val query = Query(Criteria.where("_id").`is`(id))
-        mongoTemplate.remove(query, Category::class.java)
+        mongoTemplate.remove(query, Product::class.java)
     }
 
     override fun existsProductById(id: String): Boolean {
         val query = Query(Criteria.where("_id").`is`(id))
-        return mongoTemplate.exists(query, Category::class.java)
+        return mongoTemplate.exists(query, Product::class.java)
     }
 
     override fun belongsProductToOwnerId(id: String, ownerId: String): Boolean {
         val query = Query(Criteria.where("_id").`is`(id).and("ownerId").`is`(ownerId))
-        return mongoTemplate.exists(query, Category::class.java)
+        return mongoTemplate.exists(query, Product::class.java)
     }
 }

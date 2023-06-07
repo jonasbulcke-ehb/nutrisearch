@@ -2,32 +2,32 @@ package be.ehb.gdt.nutrisearch.restapi.consumption
 
 import be.ehb.gdt.nutrisearch.domain.consumption.entities.Consumption
 import be.ehb.gdt.nutrisearch.domain.consumption.service.ConsumptionService
-import be.ehb.gdt.nutrisearch.restapi.auth.services.AuthenticationFacade
+import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
-import java.util.Date
+import java.time.LocalDate
+import java.util.*
 
 @RestController
 @RequestMapping("/api/v1/consumptions")
-class ConsumptionsRestController(
-    private val service: ConsumptionService,
-    private val authFacade: AuthenticationFacade
-) {
+class ConsumptionsRestController(private val service: ConsumptionService) {
 
     @GetMapping
-    fun getConsumptions(@RequestParam consumedAt: Date) =
-        service.getConsumptionsByTimestamp(authFacade.authentication.name, consumedAt)
+    fun getConsumptions(@RequestParam timestamp: LocalDate) = service.getConsumptionsByTimestamp(timestamp)
 
     @GetMapping("/{id}")
-    fun getConsumption(@PathVariable id: String) = service.getConsumptionById(id, authFacade.authentication.name)
+    fun getConsumption(@PathVariable id: String) = service.getConsumptionById(id)
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     fun postConsumption(@RequestBody consumption: Consumption) =
-        service.createConsumption(authFacade.authentication.name, consumption)
+        service.createConsumption(consumption)
 
     @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     fun putConsumption(@PathVariable id: String, @RequestBody consumption: Consumption) =
-        service.updateConsumption(id, authFacade.authentication.name, consumption)
+        service.updateConsumption(id, consumption)
 
     @DeleteMapping("/{id}")
-    fun deleteConsumption(@PathVariable id: String) = service.deleteConsumption(id, authFacade.authentication.name)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun deleteConsumption(@PathVariable id: String) = service.deleteConsumption(id)
 }

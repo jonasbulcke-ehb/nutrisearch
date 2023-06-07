@@ -1,6 +1,7 @@
 package be.ehb.gdt.nutrisearch.domain.userinfo.services
 
 import be.ehb.gdt.nutrisearch.domain.userinfo.entities.UserInfo
+import be.ehb.gdt.nutrisearch.domain.userinfo.exceptions.MultipleUserInfoForAuthenticationException
 import be.ehb.gdt.nutrisearch.domain.userinfo.exceptions.NoUserInfoForAuthenticationFound
 import be.ehb.gdt.nutrisearch.domain.userinfo.exceptions.UserInfoNotFoundException
 import be.ehb.gdt.nutrisearch.domain.userinfo.repositories.UserInfoRepository
@@ -19,7 +20,7 @@ class UserInfoServiceImpl(private val repo: UserInfoRepository) : UserInfoServic
 
     override fun createUserInfo(authId: String, userInfo: UserInfo): UserInfo {
         if(repo.existUserInfoByAuthId(authId)) {
-            throw NoUserInfoForAuthenticationFound()
+            throw MultipleUserInfoForAuthenticationException()
         }
         userInfo.authId = authId
         return repo.insertUserInfo(userInfo)
@@ -40,8 +41,6 @@ class UserInfoServiceImpl(private val repo: UserInfoRepository) : UserInfoServic
     }
 
     override fun deleteUserInfoByAuthId(authId: String) {
-        val userInfo = repo.findUserInfoByAuthId(authId) ?: throw NoUserInfoForAuthenticationFound()
-        userInfo.authId = null
-        repo.insertUserInfo(userInfo)
+        repo.deleteUserInfoByAuthId(authId)
     }
 }

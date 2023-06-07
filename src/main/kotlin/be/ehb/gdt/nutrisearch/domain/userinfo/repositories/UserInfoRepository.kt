@@ -11,6 +11,8 @@ interface UserInfoRepository {
     fun insertUserInfo(userInfo: UserInfo): UserInfo
     fun updateUserInfo(authId: String, userUpdatableInfo: UserUpdatableInfo)
     fun insertWeight(authId: String, weightMeasurement: WeightMeasurement)
+    fun deleteUserInfoByAuthId(authId: String)
+    fun hardDeleteUserInfoByAuthId(authId: String)
     fun existUserInfoById(id: String): Boolean
     fun existUserInfoByAuthId(authId: String): Boolean
 }

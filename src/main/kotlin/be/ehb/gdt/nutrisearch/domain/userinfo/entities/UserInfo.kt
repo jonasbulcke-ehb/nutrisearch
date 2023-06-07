@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document
 import java.time.LocalDate
 import java.util.*
 
-@Document("user-info")
+@Document("userinfo")
 class UserInfo(
     val dob: LocalDate,
     val activityLevel: ActivityLevel,
@@ -17,7 +17,7 @@ class UserInfo(
     val sex: Sex,
     val isPregnant: Boolean = false,
     val isBreastFeeding: Boolean = false,
-    val weightMeasurementMeasurements: List<WeightMeasurement> = listOf(),
+    val weightMeasurements: List<WeightMeasurement> = listOf(),
     @Id val id: String = ObjectId.get().toHexString()
 ) {
     @JsonIgnore

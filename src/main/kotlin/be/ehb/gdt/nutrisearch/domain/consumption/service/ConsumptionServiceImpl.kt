@@ -4,59 +4,66 @@ import be.ehb.gdt.nutrisearch.domain.consumption.entities.Consumption
 import be.ehb.gdt.nutrisearch.domain.consumption.exceptions.ConsumptionNotFoundException
 import be.ehb.gdt.nutrisearch.domain.consumption.repositories.ConsumptionRepository
 import be.ehb.gdt.nutrisearch.domain.exceptions.ForbiddenOperationException
+import be.ehb.gdt.nutrisearch.domain.exceptions.ResourceDoesNotMatchIdException
 import be.ehb.gdt.nutrisearch.domain.userinfo.exceptions.NoUserInfoForAuthenticationFound
 import be.ehb.gdt.nutrisearch.domain.userinfo.repositories.UserInfoRepository
+import be.ehb.gdt.nutrisearch.restapi.auth.services.AuthenticationFacade
 import org.springframework.stereotype.Component
-import java.util.*
+import java.time.LocalDate
 
 @Component
 class ConsumptionServiceImpl(
     private val consumptionRepo: ConsumptionRepository,
-    private val userInfoRepo: UserInfoRepository
+    private val userInfoRepo: UserInfoRepository,
+    private val authFacade: AuthenticationFacade
 ) : ConsumptionService {
 
-    override fun getConsumptionsByTimestamp(authId: String, consumedAt: Date): List<Consumption> {
-        val userInfoId = getUserInfoId(authId)
-        return consumptionRepo.findConsumptionsByTimestampAndUserInfoId(consumedAt, userInfoId)
+    override fun getConsumptionsByTimestamp(timestamp: LocalDate): List<Consumption> {
+        val userInfoId = getUserInfoId()
+        return consumptionRepo.findConsumptionsByTimestampAndUserInfoId(timestamp, userInfoId)
     }
 
-    override fun getConsumptionById(id: String, authId: String): Consumption {
-        val userInfoId = getUserInfoId(authId)
+    override fun getConsumptionById(id: String): Consumption {
+        val userInfoId = getUserInfoId()
         val consumption = consumptionRepo.findConsumptionById(id) ?: throw ConsumptionNotFoundException(id)
-        if (consumption.userInfoId != userInfoId) {
+        if (consumption.userInfoId != userInfoId && !authFacade.isInRole("dietitian")) {
             throw ForbiddenOperationException("Forbidden to retrieve consumption with id $id")
         }
         return consumption
     }
 
-    override fun createConsumption(authId: String, consumption: Consumption): Consumption {
+    override fun createConsumption(consumption: Consumption): Consumption {
         return consumption.apply {
-            userInfoId = getUserInfoId(authId)
+            userInfoId = getUserInfoId()
         }.also {
             consumptionRepo.saveConsumption(it)
         }
     }
 
-    override fun updateConsumption(id: String, authId: String, consumption: Consumption) {
+    override fun updateConsumption(id: String, consumption: Consumption) {
+        if (consumption.id != id) {
+            throw ResourceDoesNotMatchIdException(consumption.id, id)
+        }
+
         if (!consumptionRepo.existsConsumptionById(id)) {
             throw ConsumptionNotFoundException(id)
         }
 
-        val userInfoId = getUserInfoId(authId)
+        val userInfoId = getUserInfoId()
 
-        if (consumption.userInfoId != userInfoId || !consumptionRepo.belongsConsumptionToUser(id, userInfoId)) {
+        if (!consumptionRepo.belongsConsumptionToUser(id, userInfoId)) {
             throw ForbiddenOperationException("Forbidden to modify consumption with id $id")
         }
 
-        consumptionRepo.saveConsumption(consumption)
+        consumption.apply {
+            this.userInfoId = userInfoId
+        }.also {
+            consumptionRepo.saveConsumption(it)
+        }
     }
 
-    override fun deleteConsumption(id: String, authId: String) {
-        if (!consumptionRepo.existsConsumptionById(id)) {
-            throw ConsumptionNotFoundException(id)
-        }
-
-        val userInfoId = getUserInfoId(authId)
+    override fun deleteConsumption(id: String) {
+        val userInfoId = getUserInfoId()
 
         if (!consumptionRepo.belongsConsumptionToUser(id, userInfoId)) {
             throw ForbiddenOperationException("Forbidden to delete consumption with id $id")
@@ -65,6 +72,6 @@ class ConsumptionServiceImpl(
         consumptionRepo.deleteConsumption(id)
     }
 
-    private fun getUserInfoId(authId: String) =
-        userInfoRepo.findUserInfoIdByAuthId(authId) ?: throw NoUserInfoForAuthenticationFound()
+    private fun getUserInfoId() =
+        userInfoRepo.findUserInfoIdByAuthId(authFacade.authentication.name) ?: throw NoUserInfoForAuthenticationFound()
 }

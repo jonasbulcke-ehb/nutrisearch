@@ -5,28 +5,39 @@ import be.ehb.gdt.nutrisearch.domain.exceptions.ResourceDoesNotMatchIdException
 import be.ehb.gdt.nutrisearch.domain.product.entities.Product
 import be.ehb.gdt.nutrisearch.domain.product.exceptions.ProductNotFoundException
 import be.ehb.gdt.nutrisearch.domain.product.repositories.ProductRepository
+import be.ehb.gdt.nutrisearch.domain.product.valueobjects.ServingSize
+import be.ehb.gdt.nutrisearch.domain.userinfo.exceptions.NoUserInfoForAuthenticationFound
+import be.ehb.gdt.nutrisearch.domain.userinfo.repositories.UserInfoRepository
+import be.ehb.gdt.nutrisearch.restapi.auth.services.AuthenticationFacade
 import org.springframework.stereotype.Service
 
 @Service
-class ProductServiceImpl(val repo: ProductRepository) : ProductService {
+class ProductServiceImpl(
+    private val repo: ProductRepository,
+    private val userInfoRepo: UserInfoRepository,
+    private val authFacade: AuthenticationFacade
+) : ProductService {
     override fun getProducts() = repo.findAllProducts()
 
-    override fun getProduct(id: String): Product {
-        return repo.findProductById(id) ?: throw ProductNotFoundException(id)
-    }
+    override fun getProduct(id: String) = repo.findProductById(id) ?: throw ProductNotFoundException(id)
 
-    override fun createProduct(isVerified: Boolean, ownerId: String, product: Product) =
-        product.apply {
-            this.isVerified = isVerified
-            this.ownerId = ownerId
+    override fun createProduct(product: Product): Product {
+        return product.apply {
+            servingSizes.add(ServingSize())
+            isVerified = authFacade.isInRole("dietitian")
+            ownerId = getUserInfoId()
         }.also {
             repo.saveProduct(it)
         }
+    }
 
-    override fun updateProduct(id: String, isVerified: Boolean, ownerId: String, product: Product) {
+    override fun updateProduct(id: String, product: Product) {
         if (!repo.existsProductById(id)) {
             throw ProductNotFoundException(id)
         }
+
+        val ownerId = getUserInfoId()
+        val isVerified = authFacade.isInRole("dietitian")
 
         if (!repo.belongsProductToOwnerId(id, ownerId) && !isVerified) {
             throw ForbiddenOperationException("Forbidden to modify product with id $id")
@@ -48,15 +59,18 @@ class ProductServiceImpl(val repo: ProductRepository) : ProductService {
         repo.verifyProduct(id)
     }
 
-    override fun deleteProduct(id: String, ownerId: String) {
+    override fun deleteProduct(id: String) {
         if (!repo.existsProductById(id)) {
             throw ProductNotFoundException(id)
         }
 
-        if (!repo.belongsProductToOwnerId(id, ownerId)) {
+        if (!repo.belongsProductToOwnerId(id, getUserInfoId()) && !authFacade.isInRole("dietitian")) {
             throw ForbiddenOperationException("Forbidden to delete product with id $id")
         }
 
         repo.deleteProductById(id)
     }
+
+    private fun getUserInfoId() =
+        userInfoRepo.findUserInfoIdByAuthId(authFacade.authentication.name) ?: throw NoUserInfoForAuthenticationFound()
 }

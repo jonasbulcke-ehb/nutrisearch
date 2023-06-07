@@ -1,6 +1,5 @@
 package be.ehb.gdt.nutrisearch.restapi.userinfo
 
-import be.ehb.gdt.nutrisearch.restapi.auth.config.RequiresDietitianRole
 import be.ehb.gdt.nutrisearch.domain.userinfo.entities.UserInfo
 import be.ehb.gdt.nutrisearch.domain.userinfo.services.UserInfoService
 import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.UserUpdatableInfo
@@ -11,12 +10,11 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1/userinfo")
-class UserInfoController(private val service: UserInfoService, private val authenticationFacade: AuthenticationFacade) {
+class UserInfoRestController(private val service: UserInfoService, private val authenticationFacade: AuthenticationFacade) {
     @GetMapping
     fun getAuthorizedUserInfo() = service.getUserInfoByAuthId(authenticationFacade.authentication.name)
 
     @GetMapping("/{id}")
-    @RequiresDietitianRole
     fun getUserInfo(@PathVariable id: String) = service.getUserInfo(id)
 
     @GetMapping("/has-userinfo")

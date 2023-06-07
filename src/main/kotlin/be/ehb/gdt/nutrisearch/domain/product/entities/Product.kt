@@ -17,7 +17,7 @@ class Product(
     var categoryId: String,
     var isVerified: Boolean = false,
     val preparations: MutableList<Preparation> = mutableListOf(),
-    val servingSizes: MutableList<ServingSize> = mutableListOf(),
+    val servingSizes: MutableSet<ServingSize> = mutableSetOf(),
     @Id
     val id: String = ObjectId.get().toHexString(),
 ) {

@@ -21,7 +21,6 @@ class UserInfoMongoRepository(private val mongoTemplate: MongoTemplate) : UserIn
 
     override fun findUserInfoIdByAuthId(authId: String): String? {
         val query = Query(Criteria.where("authId").`is`(authId))
-//        query.fields().include("_id")
         return mongoTemplate.findOne(query, UserInfo::class.java)?.id
     }
 
@@ -45,6 +44,18 @@ class UserInfoMongoRepository(private val mongoTemplate: MongoTemplate) : UserIn
         val query = Query(Criteria.where("authId").`is`(authId))
         val update = Update().push("weightMeasurements", weightMeasurement)
         mongoTemplate.updateFirst(query, update, UserInfo::class.java)
+    }
+
+    override fun deleteUserInfoByAuthId(authId: String) {
+        val query = Query(Criteria.where("authId").`is`(authId))
+        val update = Update().unset("authId")
+        mongoTemplate.updateFirst(query, update, UserInfo::class.java)
+    }
+
+    override fun hardDeleteUserInfoByAuthId(authId: String) {
+        Query(Criteria.where("authId").`is`(authId)).also {
+            mongoTemplate.remove(it, UserInfo::class.java)
+        }
     }
 
     override fun existUserInfoById(id: String): Boolean {

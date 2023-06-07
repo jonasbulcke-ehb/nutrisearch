@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Cornflakes",
+    "categoryId": "Graanproducten-id",
+    "isVerified": true,
+    "id": "product-1"
+  },
+  {
+    "name": "Mac & Cheese",
+    "categoryId": "Bereide-gerechten-id",
+    "isVerified": false,
+    "id": "product-2"
+  },
+  {
+    "name": "Aardbeienconfituur",
+    "categoryId": "Beleg- en smeermiddelen",
+    "isVerified": false,
+    "id": "product-3"
+  },
+  {
+    "name": "Choco",
+    "categoryId": "Beleg- en smeermiddelen",
+    "isVerified": true,
+    "id": "product-4"
+  }
+]

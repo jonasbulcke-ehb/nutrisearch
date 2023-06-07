@@ -3,10 +3,10 @@ package be.ehb.gdt.nutrisearch.domain.consumption.entities
 import be.ehb.gdt.nutrisearch.domain.consumption.valueobjects.Product
 import be.ehb.gdt.nutrisearch.domain.product.entities.Preparation
 import be.ehb.gdt.nutrisearch.domain.product.valueobjects.ServingSize
+import com.fasterxml.jackson.annotation.JsonIgnore
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import java.time.LocalDate
-import java.util.Date
 
 class Consumption(
     val meal: Meal,
@@ -14,9 +14,10 @@ class Consumption(
     val servingSize: ServingSize,
     val preparation: Preparation,
     val amount: Double,
-    val consumedAt: LocalDate,
+    val timestamp: LocalDate,
     @Id val id: String = ObjectId.get().toHexString()
 ) {
+    @JsonIgnore
     lateinit var userInfoId: String
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

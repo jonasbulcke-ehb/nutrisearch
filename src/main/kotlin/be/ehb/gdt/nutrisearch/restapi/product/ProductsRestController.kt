@@ -2,14 +2,12 @@ package be.ehb.gdt.nutrisearch.restapi.product
 
 import be.ehb.gdt.nutrisearch.domain.product.entities.Product
 import be.ehb.gdt.nutrisearch.domain.product.services.ProductService
-import be.ehb.gdt.nutrisearch.restapi.auth.config.RequiresDietitianRole
-import be.ehb.gdt.nutrisearch.restapi.auth.services.AuthenticationFacade
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1/products")
-class ProductsRestController(private val service: ProductService, private val authFacade: AuthenticationFacade) {
+class ProductsRestController(private val service: ProductService) {
 
     @GetMapping
     fun getProducts() = service.getProducts()
@@ -19,25 +17,17 @@ class ProductsRestController(private val service: ProductService, private val au
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun postProduct(@RequestBody product: Product): Product {
-        val isVerified = authFacade.isInRole("dietitian")
-        val ownerId = authFacade.authentication.name
-        return service.createProduct(isVerified, ownerId, product)
-    }
+    fun postProduct(@RequestBody product: Product) = service.createProduct(product)
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun putProduct(@PathVariable id: String, @RequestBody product: Product) {
-        val isVerified = authFacade.isInRole("dietitian")
-        val ownerId = authFacade.authentication.name
-        service.updateProduct(id, isVerified, ownerId, product)
-    }
+    fun putProduct(@PathVariable id: String, @RequestBody product: Product) = service.updateProduct(id, product)
 
-    @PatchMapping("/{id}/verify")
-    @RequiresDietitianRole
+    @PutMapping("/{id}/verify")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     fun verifyProduct(@PathVariable id: String) = service.verifyProduct(id)
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun deleteProduct(@PathVariable id: String) = service.deleteProduct(id, authFacade.authentication.name)
+    fun deleteProduct(@PathVariable id: String) = service.deleteProduct(id)
 }

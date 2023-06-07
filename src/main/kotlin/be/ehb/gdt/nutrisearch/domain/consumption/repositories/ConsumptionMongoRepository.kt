@@ -5,13 +5,13 @@ import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.stereotype.Repository
-import java.util.Date
+import java.time.LocalDate
 
 @Repository
 class ConsumptionMongoRepository(val mongoTemplate: MongoTemplate) : ConsumptionRepository {
 
-    override fun findConsumptionsByTimestampAndUserInfoId(consumedAt: Date, userInfoId: String): List<Consumption> {
-        val query = Query.query(Criteria.where("consumedAt").`is`(consumedAt).and("userInfoId").`is`(userInfoId))
+    override fun findConsumptionsByTimestampAndUserInfoId(timestamp: LocalDate, userInfoId: String): List<Consumption> {
+        val query = Query.query(Criteria.where("timestamp").`is`(timestamp).and("userInfoId").`is`(userInfoId))
         return mongoTemplate.find(query, Consumption::class.java)
     }
 
