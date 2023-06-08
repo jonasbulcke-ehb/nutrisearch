@@ -1,0 +1,17 @@
+{
+  "name": "Cornflakes",
+  "categoryId": "Graanproducten-id",
+  "isVerified": true,
+  "preparations": [
+    {
+      "name": "Onbereid",
+      "nutrients": {}
+    }
+  ],
+  "servingSizes": [
+    {
+      "name": "Kom",
+      "grams": 30
+    }
+  ]
+}

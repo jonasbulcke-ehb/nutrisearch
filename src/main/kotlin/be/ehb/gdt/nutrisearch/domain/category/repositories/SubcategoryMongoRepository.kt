@@ -32,8 +32,9 @@ class SubcategoryMongoRepository(private val mongoTemplate: MongoTemplate): Subc
     }
 
     override fun deleteSubcategory(parentId: String, id: String) {
-        val query = Query(Criteria.where("_id").`is`(parentId).and(SUBCATEGORY_ID_KEY).`is`(id))
-        mongoTemplate.remove(query, Category::class.java)
+        val query = Query(Criteria.where("_id").`is`(parentId))
+        val update = Update().pull("subcategories", Query(Criteria.where("_id").`is`(id)))
+        mongoTemplate.updateFirst(query, update, Category::class.java)
     }
 
     override fun existsParentCategoryById(parentId: String): Boolean {

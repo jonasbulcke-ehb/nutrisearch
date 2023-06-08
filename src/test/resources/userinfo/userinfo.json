@@ -1,0 +1,14 @@
+{
+  "dob": "1999-04-29",
+  "activityLevel": "NotActive",
+  "length": 188,
+  "isPregnant": false,
+  "isBreastFeeding": false,
+  "sex": "Male",
+  "weightMeasurements": [
+    {
+      "value": 88,
+      "measuredAt": "2023-05-31T08:12:57"
+    }
+  ]
+}

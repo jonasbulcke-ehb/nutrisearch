@@ -24,7 +24,7 @@ class CategoryMongoRepository(private val mongoTemplate: MongoTemplate) : Catego
 
     override fun deleteCategory(id: String) {
         val query = Query(Criteria.where("_id").`is`(id))
-        mongoTemplate.remove(query)
+        mongoTemplate.remove(query, Category::class.java)
     }
 
     override fun existsCategoryById(id: String): Boolean {

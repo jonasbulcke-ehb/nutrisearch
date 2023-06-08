@@ -1,0 +1,17 @@
+{
+  "name": "Aardbeienconfituur",
+  "categoryId": "Beleg- en smeermiddelen",
+  "isVerified": false,
+  "preparations": [
+    {
+      "name": "Onbereid"
+    }
+  ],
+  "servingSizes": [
+    {
+      "name": "Gram",
+      "grams": 1.0
+    }
+  ],
+  "id": "product-3"
+}

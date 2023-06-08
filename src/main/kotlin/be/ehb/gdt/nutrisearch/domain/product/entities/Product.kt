@@ -1,5 +1,7 @@
 package be.ehb.gdt.nutrisearch.domain.product.entities
 
+import be.ehb.gdt.nutrisearch.domain.product.valueobjects.ServingSize
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
@@ -15,8 +17,25 @@ class Product(
     var categoryId: String,
     var isVerified: Boolean = false,
     val preparations: MutableList<Preparation> = mutableListOf(),
-    val servingSizes: MutableList<ServingSize> = mutableListOf(),
+    val servingSizes: MutableSet<ServingSize> = mutableSetOf(),
     @Id
     val id: String = ObjectId.get().toHexString(),
-)
+) {
+    @Indexed
+    @JsonIgnore
+    lateinit var ownerId: String
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Product
+
+        return id == other.id
+    }
+
+    override fun hashCode(): Int {
+        return id.hashCode()
+    }
+}
 

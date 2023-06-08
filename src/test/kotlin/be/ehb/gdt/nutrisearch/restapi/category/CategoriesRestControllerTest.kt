@@ -4,13 +4,15 @@ import be.ehb.gdt.nutrisearch.domain.category.entities.Category
 import be.ehb.gdt.nutrisearch.domain.category.entities.Subcategory
 import be.ehb.gdt.nutrisearch.domain.category.exceptions.CategoryNotFoundException
 import be.ehb.gdt.nutrisearch.domain.category.services.CategoryService
+import be.ehb.gdt.nutrisearch.restapi.auth.config.SecurityConfig
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.test.context.ContextConfiguration
+import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
@@ -18,9 +20,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.util.ResourceUtils
 
-@WebMvcTest
-@ContextConfiguration(classes = [CategoriesController::class])
-class CategoriesControllerTest {
+@WebMvcTest(value = [CategoriesRestController::class, SecurityConfig::class])
+class CategoriesRestControllerTest {
     private val id = "cat2"
     private val name = "Graanproducten"
     private val subcategories = mutableListOf(Subcategory("Cornflakes", "cat2sub1"), Subcategory("Brood", "cat2sub2"))
@@ -45,7 +46,7 @@ class CategoriesControllerTest {
 
         `when`(categoryService.getCategories()).thenReturn(categories)
 
-        mockMvc.perform(get("/api/v1/categories"))
+        mockMvc.perform(get("/api/v1/categories").with(jwt()))
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(content().json(readJsonFromFile("categories/categories.json")))
@@ -57,7 +58,7 @@ class CategoriesControllerTest {
     fun `when GET request is sent then status 200 is expected`() {
         `when`(categoryService.getCategory("cat2")).thenReturn(category)
 
-        mockMvc.perform(get("/api/v1/categories/{id}", id))
+        mockMvc.perform(get("/api/v1/categories/{id}", id).with(jwt()))
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(content().json(readJsonFromFile("categories/category.json")))
@@ -69,7 +70,7 @@ class CategoriesControllerTest {
     fun `when GET request is sent and category does not exist then status 404 is expected`() {
         `when`(categoryService.getCategory(id)).thenThrow(CategoryNotFoundException::class.java)
 
-        mockMvc.perform(get("/api/v1/categories/{id}", id))
+        mockMvc.perform(get("/api/v1/categories/{id}", id).with(jwt()))
             .andDo(print())
             .andExpect(status().isNotFound())
 
@@ -81,9 +82,12 @@ class CategoriesControllerTest {
         val json = "{ 'id': 'id', 'name': '$name' }"
         `when`(categoryService.createCategory(name)).thenReturn(Category(name, id = "id"))
 
-        mockMvc.perform(post("/api/v1/categories").queryParam("name", name))
+        mockMvc.perform(
+            post("/api/v1/categories").queryParam("name", name)
+                .with(jwt().authorities(SimpleGrantedAuthority("ROLE_dietitian")))
+        )
             .andDo(print())
-            .andExpect(status().isCreated())
+            .andExpect(status().isCreated)
             .andExpect(content().json(json))
 
         verify(categoryService).createCategory(name)
@@ -92,9 +96,12 @@ class CategoriesControllerTest {
 
     @Test
     fun `when POST request is invalid then status 400 is expected`() {
-        mockMvc.perform(post("/api/v1/categories"))
+        mockMvc.perform(
+            post("/api/v1/categories")
+                .with(jwt().authorities(SimpleGrantedAuthority("ROLE_dietitian")))
+        )
             .andDo(print())
-            .andExpect(status().isBadRequest())
+            .andExpect(status().isBadRequest)
             .andExpect { assertEquals("Required parameter 'name' is not present.", it.response.errorMessage) }
 
         verifyNoInteractions(categoryService)
@@ -102,9 +109,12 @@ class CategoriesControllerTest {
 
     @Test
     fun `when category exists and valid PUT request is sent then status 204 expected`() {
-        mockMvc.perform(put("/api/v1/categories/{id}", id).queryParam("name", name))
+        mockMvc.perform(
+            put("/api/v1/categories/{id}", id).queryParam("name", name)
+                .with(jwt().authorities(SimpleGrantedAuthority("ROLE_dietitian")))
+        )
             .andDo(print())
-            .andExpect(status().isNoContent())
+            .andExpect(status().isNoContent)
 
         verify(categoryService).updateCategory(id, name)
     }
@@ -113,16 +123,22 @@ class CategoriesControllerTest {
     fun `when category does not exists and PUT request is sent then status 404 is expected`() {
         `when`(categoryService.updateCategory(id, name)).thenThrow(CategoryNotFoundException::class.java)
 
-        mockMvc.perform(put("/api/v1/categories/{id}", id).queryParam("name", name))
+        mockMvc.perform(
+            put("/api/v1/categories/{id}", id).queryParam("name", name)
+                .with(jwt().authorities(SimpleGrantedAuthority("ROLE_dietitian")))
+        )
             .andDo(print())
-            .andExpect(status().isNotFound())
+            .andExpect(status().isNotFound)
 
         verify(categoryService).updateCategory(id, name)
     }
 
     @Test
     fun `when category exists and invalid PUT request is sent then status 400 is expected`() {
-        mockMvc.perform(put("/api/v1/categories/{id}", id))
+        mockMvc.perform(
+            put("/api/v1/categories/{id}", id)
+                .with(jwt().authorities(SimpleGrantedAuthority("ROLE_dietitian")))
+        )
             .andDo(print())
             .andExpect(status().isBadRequest())
             .andExpect { assertEquals("Required parameter 'name' is not present.", it.response.errorMessage) }
@@ -132,9 +148,12 @@ class CategoriesControllerTest {
 
     @Test
     fun `when category does exists and DELETE request is sent then status 204 is expected`() {
-        mockMvc.perform(delete("/api/v1/categories/{id}", id))
+        mockMvc.perform(
+            delete("/api/v1/categories/{id}", id)
+                .with(jwt().authorities(SimpleGrantedAuthority("ROLE_dietitian")))
+        )
             .andDo(print())
-            .andExpect(status().isNoContent())
+            .andExpect(status().isNoContent)
 
         verify(categoryService).deleteCategory(id)
     }
@@ -143,9 +162,12 @@ class CategoriesControllerTest {
     fun `when category does not exists and DELETE request is sent then status 404 is expected`() {
         `when`(categoryService.deleteCategory(id)).thenThrow(CategoryNotFoundException::class.java)
 
-        mockMvc.perform(delete("/api/v1/categories/{id}", id))
+        mockMvc.perform(
+            delete("/api/v1/categories/{id}", id)
+                .with(jwt().authorities(SimpleGrantedAuthority("ROLE_dietitian")))
+        )
             .andDo(print())
-            .andExpect(status().isNotFound())
+            .andExpect(status().isNotFound)
 
         verify(categoryService).deleteCategory(id)
     }
