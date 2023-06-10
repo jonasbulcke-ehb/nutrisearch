@@ -2,7 +2,9 @@ package be.ehb.gdt.nutrisearch.domain.category.services
 
 import be.ehb.gdt.nutrisearch.domain.category.entities.Category
 import be.ehb.gdt.nutrisearch.domain.category.exceptions.CategoryNotFoundException
+import be.ehb.gdt.nutrisearch.domain.category.exceptions.InvalidCategoryException
 import be.ehb.gdt.nutrisearch.domain.category.repositories.CategoryRepository
+import be.ehb.gdt.nutrisearch.domain.exceptions.ResourceDoesNotMatchIdException
 import org.springframework.stereotype.Service
 
 @Service
@@ -12,17 +14,28 @@ class CategoryServiceImpl(private val repo: CategoryRepository) : CategoryServic
     override fun getCategory(id: String) =
         repo.findCategory(id) ?: throw CategoryNotFoundException(id)
 
-    override fun createCategory(name: String) = repo.insertCategory(Category(name))
+    override fun createCategory(category: Category): Category {
+        if (category.subcategories.isEmpty()) {
+            throw InvalidCategoryException()
+        }
+        return repo.saveCategory(category)
+    }
 
-    override fun updateCategory(id: String, name: String) {
-        if(!repo.existsCategoryById(id)) {
+    override fun updateCategory(id: String, category: Category) {
+        if (category.id != id) {
+            throw ResourceDoesNotMatchIdException(category.id, id)
+        }
+        if (!repo.existsCategoryById(id)) {
             throw CategoryNotFoundException(id)
         }
-        repo.updateCategory(id, name)
+        if (category.subcategories.isEmpty()) {
+            throw InvalidCategoryException()
+        }
+        repo.saveCategory(category)
     }
 
     override fun deleteCategory(id: String) {
-        if(!repo.existsCategoryById(id)) {
+        if (!repo.existsCategoryById(id)) {
             throw CategoryNotFoundException(id)
         }
         repo.deleteCategory(id)

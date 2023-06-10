@@ -1,7 +1,7 @@
 package be.ehb.gdt.nutrisearch.restapi.consumption
 
 import be.ehb.gdt.nutrisearch.domain.consumption.entities.Consumption
-import be.ehb.gdt.nutrisearch.domain.consumption.entities.Meal
+import be.ehb.gdt.nutrisearch.domain.consumption.valueobjects.Meal
 import be.ehb.gdt.nutrisearch.domain.consumption.valueobjects.Product
 import be.ehb.gdt.nutrisearch.domain.product.entities.Preparation
 import be.ehb.gdt.nutrisearch.domain.product.valueobjects.ServingSize

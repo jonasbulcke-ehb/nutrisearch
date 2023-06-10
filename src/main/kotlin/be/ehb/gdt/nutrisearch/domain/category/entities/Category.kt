@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document
 @Document("categories")
 class Category(
     var name: String,
-    val subcategories: MutableList<Subcategory> = mutableListOf(),
+    val subcategories: MutableList<Subcategory>,
     @Id
     val id: String = ObjectId.get().toHexString()
 
