@@ -2,9 +2,8 @@ package be.ehb.gdt.nutrisearch.restapi.category
 
 import be.ehb.gdt.nutrisearch.domain.category.entities.Category
 import be.ehb.gdt.nutrisearch.domain.category.entities.Subcategory
-import be.ehb.gdt.nutrisearch.domain.category.exceptions.CategoryNotFoundException
-import be.ehb.gdt.nutrisearch.domain.category.exceptions.InvalidCategoryException
 import be.ehb.gdt.nutrisearch.domain.category.services.CategoryService
+import be.ehb.gdt.nutrisearch.domain.exceptions.ResourceNotFoundException
 import be.ehb.gdt.nutrisearch.restapi.auth.config.SecurityConfig
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.*
@@ -71,7 +70,7 @@ class CategoriesRestControllerTest {
 
     @Test
     fun `when GET request is sent and category does not exist then status 404 is expected`() {
-        whenever(categoryService.getCategory(id)).thenThrow(CategoryNotFoundException::class.java)
+        whenever(categoryService.getCategory(id)).thenThrow(ResourceNotFoundException::class.java)
 
         mockMvc.perform(get("/api/v1/categories/{id}", id).with(jwt()))
             .andDo(print())
@@ -99,7 +98,7 @@ class CategoriesRestControllerTest {
 
     @Test
     fun `when POST request is invalid then status 400 is expected`() {
-        whenever(categoryService.createCategory(argThat(CategoryMatcher()))).thenThrow(InvalidCategoryException())
+        whenever(categoryService.createCategory(argThat(CategoryMatcher()))).thenThrow(IllegalStateException())
         val json = """{"name": "Graanproducten", "subcategories": []}""";
         mockMvc.perform(
             post("/api/v1/categories")
@@ -128,7 +127,7 @@ class CategoriesRestControllerTest {
 
     @Test
     fun `when category does not exists and PUT request is sent then status 404 is expected`() {
-        whenever(categoryService.updateCategory(id, category)).thenThrow(CategoryNotFoundException::class.java)
+        whenever(categoryService.updateCategory(id, category)).thenThrow(ResourceNotFoundException::class.java)
 
         mockMvc.perform(
             put("/api/v1/categories/{id}", id)
@@ -144,7 +143,7 @@ class CategoriesRestControllerTest {
 
     @Test
     fun `when category exists and invalid PUT request is sent then status 400 is expected`() {
-        whenever(categoryService.updateCategory(any(), argThat(CategoryMatcher()))).thenThrow(InvalidCategoryException())
+        whenever(categoryService.updateCategory(any(), argThat(CategoryMatcher()))).thenThrow(IllegalStateException())
         val json = """{"name": "Graanproducten", "subcategories": [], "id": "$id"}""";
         mockMvc.perform(
             put("/api/v1/categories/{id}", id)
@@ -160,7 +159,7 @@ class CategoriesRestControllerTest {
 
     @Test
     fun `when ids does not match and PUT request is sent then status 400 is expected`() {
-        whenever(categoryService.updateCategory(any(), argThat(CategoryMatcher()))).thenThrow(InvalidCategoryException())
+        whenever(categoryService.updateCategory(any(), argThat(CategoryMatcher()))).thenThrow(IllegalStateException())
         val json = """{"name": "Graanproducten", "subcategories": [], "id": "other"}""";
         mockMvc.perform(
             put("/api/v1/categories/{id}", id)
@@ -188,7 +187,7 @@ class CategoriesRestControllerTest {
 
     @Test
     fun `when category does not exists and DELETE request is sent then status 404 is expected`() {
-        whenever(categoryService.deleteCategory(id)).thenThrow(CategoryNotFoundException::class.java)
+        whenever(categoryService.deleteCategory(id)).thenThrow(ResourceNotFoundException::class.java)
 
         mockMvc.perform(
             delete("/api/v1/categories/{id}", id)

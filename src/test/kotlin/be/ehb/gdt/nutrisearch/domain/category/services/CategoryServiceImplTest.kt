@@ -2,8 +2,8 @@ package be.ehb.gdt.nutrisearch.domain.category.services
 
 import be.ehb.gdt.nutrisearch.domain.category.entities.Category
 import be.ehb.gdt.nutrisearch.domain.category.entities.Subcategory
-import be.ehb.gdt.nutrisearch.domain.category.exceptions.CategoryNotFoundException
 import be.ehb.gdt.nutrisearch.domain.category.repositories.CategoryRepository
+import be.ehb.gdt.nutrisearch.domain.exceptions.ResourceNotFoundException
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -61,8 +61,8 @@ class CategoryServiceImplTest {
     fun `when category does not exist then throw exception`() {
         whenever(repo.findCategory(id)).thenReturn(null)
 
-        val exception = assertThrows(CategoryNotFoundException::class.java) { service.getCategory(id) }
-        assertEquals("Category with identifier $id could not be found", exception.message)
+        val exception = assertThrows(ResourceNotFoundException::class.java) { service.getCategory(id) }
+        assertEquals("Resource of type Category with id $id could not be found", exception.message)
         verify(repo).findCategory(id)
     }
 
@@ -79,8 +79,8 @@ class CategoryServiceImplTest {
     fun `when category does not exists and tries to update then throw exception`() {
         whenever(repo.existsCategoryById(id)).thenReturn(false)
 
-        val exception = assertThrows(CategoryNotFoundException::class.java) { service.updateCategory(id, category) }
-        assertEquals("Category with identifier $id could not be found", exception.message)
+        val exception = assertThrows(ResourceNotFoundException::class.java) { service.updateCategory(id, category) }
+        assertEquals("Resource of type Category with id $id could not be found", exception.message)
         verify(repo).existsCategoryById(id)
     }
 
@@ -99,8 +99,8 @@ class CategoryServiceImplTest {
     fun `when category does not exists and tries to delete then throw exception`() {
         whenever(repo.existsCategoryById(id)).thenReturn(false)
 
-        val exception = assertThrows(CategoryNotFoundException::class.java) { service.deleteCategory(id) }
-        assertEquals("Category with identifier $id could not be found", exception.message)
+        val exception = assertThrows(ResourceNotFoundException::class.java) { service.deleteCategory(id) }
+        assertEquals("Resource of type Category with id $id could not be found", exception.message)
         verify(repo).existsCategoryById(id)
     }
 

@@ -26,11 +26,12 @@ class UserInfoServiceImpl(private val repo: UserInfoRepository) : UserInfoServic
         return repo.insertUserInfo(userInfo)
     }
 
-    override fun updateUserInfo(authId: String, userUpdatableInfo: UserUpdatableInfo) {
+    override fun updateUserInfo(authId: String, userUpdatableInfo: UserUpdatableInfo): UserInfo {
         if (!repo.existUserInfoByAuthId(authId)) {
             throw NoUserInfoForAuthenticationFound()
         }
         repo.updateUserInfo(authId, userUpdatableInfo)
+        return repo.findUserInfoByAuthId(authId)!!
     }
 
     override fun addWeightMeasurement(authId: String, weightMeasurement: WeightMeasurement) {

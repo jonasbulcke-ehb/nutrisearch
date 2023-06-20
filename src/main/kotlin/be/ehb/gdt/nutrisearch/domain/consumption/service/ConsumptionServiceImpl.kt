@@ -1,10 +1,10 @@
 package be.ehb.gdt.nutrisearch.domain.consumption.service
 
 import be.ehb.gdt.nutrisearch.domain.consumption.entities.Consumption
-import be.ehb.gdt.nutrisearch.domain.consumption.exceptions.ConsumptionNotFoundException
 import be.ehb.gdt.nutrisearch.domain.consumption.repositories.ConsumptionRepository
 import be.ehb.gdt.nutrisearch.domain.exceptions.ForbiddenOperationException
 import be.ehb.gdt.nutrisearch.domain.exceptions.ResourceDoesNotMatchIdException
+import be.ehb.gdt.nutrisearch.domain.exceptions.ResourceNotFoundException
 import be.ehb.gdt.nutrisearch.domain.userinfo.exceptions.NoUserInfoForAuthenticationFound
 import be.ehb.gdt.nutrisearch.domain.userinfo.repositories.UserInfoRepository
 import be.ehb.gdt.nutrisearch.restapi.auth.services.AuthenticationFacade
@@ -24,9 +24,8 @@ class ConsumptionServiceImpl(
     }
 
     override fun getConsumptionById(id: String): Consumption {
-        val userInfoId = getUserInfoId()
-        val consumption = consumptionRepo.findConsumptionById(id) ?: throw ConsumptionNotFoundException(id)
-        if (consumption.userInfoId != userInfoId && !authFacade.isInRole("dietitian")) {
+        val consumption = consumptionRepo.findConsumptionById(id) ?: throw ResourceNotFoundException(Consumption::class.java, id)
+        if (consumption.userInfoId != getUserInfoId() && !authFacade.isInRole("dietitian")) {
             throw ForbiddenOperationException("Forbidden to retrieve consumption with id $id")
         }
         return consumption
@@ -46,7 +45,7 @@ class ConsumptionServiceImpl(
         }
 
         if (!consumptionRepo.existsConsumptionById(id)) {
-            throw ConsumptionNotFoundException(id)
+            throw ResourceNotFoundException(Consumption::class.java, id)
         }
 
         val userInfoId = getUserInfoId()

@@ -1,4 +1,4 @@
-package be.ehb.gdt.nutrisearch.domain.userinfo.entities
+package be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects
 
 enum class ActivityLevel {
     NotActive,

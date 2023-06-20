@@ -1,6 +1,7 @@
 package be.ehb.gdt.nutrisearch.domain.userinfo.repositories
 
 import be.ehb.gdt.nutrisearch.domain.userinfo.entities.UserInfo
+import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.Study
 import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.UserUpdatableInfo
 import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.WeightMeasurement
 import org.springframework.data.mongodb.core.MongoTemplate
@@ -35,7 +36,7 @@ class UserInfoMongoRepository(private val mongoTemplate: MongoTemplate) : UserIn
             length?.let { update.set("length", it) }
             sex?.let { update.set("sex", it) }
             isPregnant?.let { update.set("isPregnant", it) }
-            isBreastFeeding?.let { update.set("isBreastFeeding", it) }
+            isBreastfeeding?.let { update.set("isBreastfeeding", it) }
         }
         mongoTemplate.updateFirst(query, update, UserInfo::class.java)
     }
@@ -43,6 +44,18 @@ class UserInfoMongoRepository(private val mongoTemplate: MongoTemplate) : UserIn
     override fun insertWeight(authId: String, weightMeasurement: WeightMeasurement) {
         val query = Query(Criteria.where("authId").`is`(authId))
         val update = Update().push("weightMeasurements", weightMeasurement)
+        mongoTemplate.updateFirst(query, update, UserInfo::class.java)
+    }
+
+    override fun updateCurrentStudy(userInfoId: String, study: Study) {
+        val query = Query(Criteria.where("_id").`is`(userInfoId))
+        val update = Update().set("currentStudy", study)
+        mongoTemplate.updateFirst(query, update, UserInfo::class.java)
+    }
+
+    override fun clearCurrentStudy(userInfoId: String) {
+        val query = Query(Criteria.where("_id").`is`(userInfoId))
+        val update = Update().unset("currentStudy")
         mongoTemplate.updateFirst(query, update, UserInfo::class.java)
     }
 

@@ -9,7 +9,7 @@ interface UserInfoService {
     fun getUserInfoByAuthId(authId: String): UserInfo
     fun hasUserInfoAuthId(authId: String): Boolean
     fun createUserInfo(authId: String, userInfo: UserInfo): UserInfo
-    fun updateUserInfo(authId: String, userUpdatableInfo: UserUpdatableInfo)
+    fun updateUserInfo(authId: String, userUpdatableInfo: UserUpdatableInfo): UserInfo
     fun addWeightMeasurement(authId: String, weightMeasurement: WeightMeasurement)
     fun deleteUserInfoByAuthId(authId: String)
 }

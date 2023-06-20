@@ -1,10 +1,9 @@
 package be.ehb.gdt.nutrisearch.domain.category.services
 
 import be.ehb.gdt.nutrisearch.domain.category.entities.Category
-import be.ehb.gdt.nutrisearch.domain.category.exceptions.CategoryNotFoundException
-import be.ehb.gdt.nutrisearch.domain.category.exceptions.InvalidCategoryException
 import be.ehb.gdt.nutrisearch.domain.category.repositories.CategoryRepository
 import be.ehb.gdt.nutrisearch.domain.exceptions.ResourceDoesNotMatchIdException
+import be.ehb.gdt.nutrisearch.domain.exceptions.ResourceNotFoundException
 import org.springframework.stereotype.Service
 
 @Service
@@ -12,12 +11,10 @@ class CategoryServiceImpl(private val repo: CategoryRepository) : CategoryServic
     override fun getCategories() = repo.findAllCategories()
 
     override fun getCategory(id: String) =
-        repo.findCategory(id) ?: throw CategoryNotFoundException(id)
+        repo.findCategory(id) ?: throw ResourceNotFoundException(Category::class.java, id)
 
     override fun createCategory(category: Category): Category {
-        if (category.subcategories.isEmpty()) {
-            throw InvalidCategoryException()
-        }
+        check(category.subcategories.isNotEmpty()) { "Category needs to contain at least one subcategory" }
         return repo.saveCategory(category)
     }
 
@@ -26,17 +23,17 @@ class CategoryServiceImpl(private val repo: CategoryRepository) : CategoryServic
             throw ResourceDoesNotMatchIdException(category.id, id)
         }
         if (!repo.existsCategoryById(id)) {
-            throw CategoryNotFoundException(id)
+            throw ResourceNotFoundException(Category::class.java, id)
         }
-        if (category.subcategories.isEmpty()) {
-            throw InvalidCategoryException()
+        check(category.subcategories.isNotEmpty()) {
+            "Category needs to contain at least one subcategory"
         }
         repo.saveCategory(category)
     }
 
     override fun deleteCategory(id: String) {
         if (!repo.existsCategoryById(id)) {
-            throw CategoryNotFoundException(id)
+            throw ResourceNotFoundException(Category::class.java, id)
         }
         repo.deleteCategory(id)
     }

@@ -10,4 +10,5 @@ interface SubcategoryRepository {
     fun deleteSubcategory(parentId: String, id: String)
     fun existsParentCategoryById(parentId: String): Boolean
     fun existsSubcategoryById(parentId: String, id: String): Boolean
+    fun countSubcategoriesByCategoryId(parentId: String): Int
 }

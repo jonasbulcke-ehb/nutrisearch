@@ -11,11 +11,11 @@
   "servingSizes": [
     {
       "name": "Gram",
-      "grams": 1.0
+      "grams": 1
     },
     {
       "name": "Kom",
-      "grams": 30.0
+      "grams": 30
     }
   ]
 }

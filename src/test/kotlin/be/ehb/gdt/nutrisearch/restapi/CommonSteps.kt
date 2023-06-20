@@ -1,8 +1,8 @@
 package be.ehb.gdt.nutrisearch.restapi
 
-import be.ehb.gdt.nutrisearch.domain.userinfo.entities.ActivityLevel
-import be.ehb.gdt.nutrisearch.domain.userinfo.entities.Sex
 import be.ehb.gdt.nutrisearch.domain.userinfo.entities.UserInfo
+import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.ActivityLevel
+import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.Sex
 import io.cucumber.java.Before
 import io.cucumber.java.en.And
 import io.cucumber.java.en.Given
@@ -76,6 +76,13 @@ class CommonSteps : SpringIntegrationTest() {
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(jwt().jwt { it.claim(StandardClaimNames.SUB, testContext.authId) }.authorities(role))
+        )
+    }
+
+    @When("I POST {string}")
+    fun iPost(url: String) {
+        testContext.resultActions = mockMvc.perform(
+            post(url).with(jwt().jwt { it.claim(StandardClaimNames.SUB, testContext.authId) }.authorities(role))
         )
     }
 

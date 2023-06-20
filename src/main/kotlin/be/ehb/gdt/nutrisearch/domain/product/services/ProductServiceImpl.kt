@@ -2,8 +2,8 @@ package be.ehb.gdt.nutrisearch.domain.product.services
 
 import be.ehb.gdt.nutrisearch.domain.exceptions.ForbiddenOperationException
 import be.ehb.gdt.nutrisearch.domain.exceptions.ResourceDoesNotMatchIdException
+import be.ehb.gdt.nutrisearch.domain.exceptions.ResourceNotFoundException
 import be.ehb.gdt.nutrisearch.domain.product.entities.Product
-import be.ehb.gdt.nutrisearch.domain.product.exceptions.ProductNotFoundException
 import be.ehb.gdt.nutrisearch.domain.product.repositories.ProductRepository
 import be.ehb.gdt.nutrisearch.domain.product.valueobjects.ServingSize
 import be.ehb.gdt.nutrisearch.domain.userinfo.exceptions.NoUserInfoForAuthenticationFound
@@ -19,7 +19,8 @@ class ProductServiceImpl(
 ) : ProductService {
     override fun getProducts() = repo.findAllProducts()
 
-    override fun getProduct(id: String) = repo.findProductById(id) ?: throw ProductNotFoundException(id)
+    override fun getProduct(id: String) =
+        repo.findProductById(id) ?: throw ResourceNotFoundException(Product::class.java, id)
 
     override fun createProduct(product: Product): Product {
         return product.apply {
@@ -33,7 +34,7 @@ class ProductServiceImpl(
 
     override fun updateProduct(id: String, product: Product) {
         if (!repo.existsProductById(id)) {
-            throw ProductNotFoundException(id)
+            throw ResourceNotFoundException(Product::class.java, id)
         }
 
         val ownerId = getUserInfoId()
@@ -48,6 +49,7 @@ class ProductServiceImpl(
         }
 
         product.apply {
+            this.servingSizes.add(ServingSize())
             this.isVerified = isVerified
             this.ownerId = ownerId
         }.also {
@@ -61,7 +63,7 @@ class ProductServiceImpl(
 
     override fun deleteProduct(id: String) {
         if (!repo.existsProductById(id)) {
-            throw ProductNotFoundException(id)
+            throw ResourceNotFoundException(Product::class.java, id)
         }
 
         if (!repo.belongsProductToOwnerId(id, getUserInfoId()) && !authFacade.isInRole("dietitian")) {
