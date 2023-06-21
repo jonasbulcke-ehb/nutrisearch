@@ -17,7 +17,8 @@ class ProductServiceImpl(
     private val userInfoRepo: UserInfoRepository,
     private val authFacade: AuthenticationFacade
 ) : ProductService {
-    override fun getProducts() = repo.findAllProducts()
+    override fun getProducts(ownProducts: Boolean) =
+        if (ownProducts) repo.findAllProductsByOwnerId(getUserInfoId()) else repo.findAllProducts()
 
     override fun getProduct(id: String) =
         repo.findProductById(id) ?: throw ResourceNotFoundException(Product::class.java, id)
