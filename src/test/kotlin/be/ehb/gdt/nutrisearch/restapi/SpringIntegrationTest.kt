@@ -2,6 +2,7 @@ package be.ehb.gdt.nutrisearch.restapi
 
 import be.ehb.gdt.nutrisearch.domain.consumption.repositories.ConsumptionRepository
 import be.ehb.gdt.nutrisearch.domain.product.repositories.ProductRepository
+import be.ehb.gdt.nutrisearch.domain.study.repositories.StudyRepository
 import be.ehb.gdt.nutrisearch.domain.userinfo.repositories.UserInfoRepository
 import io.cucumber.spring.CucumberContextConfiguration
 import org.springframework.beans.factory.annotation.Autowired
@@ -36,6 +37,9 @@ class SpringIntegrationTest {
 
     @Autowired
     lateinit var productRepository: ProductRepository
+
+    @Autowired
+    lateinit var studyRepository: StudyRepository
 
     fun readJsonFromFile(fileName: String) = String(ResourceUtils.getFile("classpath:$fileName").readBytes())
 

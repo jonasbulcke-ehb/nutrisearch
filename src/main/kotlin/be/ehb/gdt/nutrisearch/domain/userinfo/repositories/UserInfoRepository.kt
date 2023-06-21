@@ -1,6 +1,7 @@
 package be.ehb.gdt.nutrisearch.domain.userinfo.repositories
 
 import be.ehb.gdt.nutrisearch.domain.userinfo.entities.UserInfo
+import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.Study
 import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.UserUpdatableInfo
 import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.WeightMeasurement
 
@@ -11,6 +12,8 @@ interface UserInfoRepository {
     fun insertUserInfo(userInfo: UserInfo): UserInfo
     fun updateUserInfo(authId: String, userUpdatableInfo: UserUpdatableInfo)
     fun insertWeight(authId: String, weightMeasurement: WeightMeasurement)
+    fun updateCurrentStudy(userInfoId: String, study: Study)
+    fun clearCurrentStudy(userInfoId: String)
     fun deleteUserInfoByAuthId(authId: String)
     fun hardDeleteUserInfoByAuthId(authId: String)
     fun existUserInfoById(id: String): Boolean

@@ -26,7 +26,6 @@ class UserInfoRestController(private val service: UserInfoService, private val a
         service.createUserInfo(authenticationFacade.authentication.name, userInfo)
 
     @PatchMapping
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     fun patchUserInfo(@RequestBody userUpdatableInfo: UserUpdatableInfo) =
         service.updateUserInfo(authenticationFacade.authentication.name, userUpdatableInfo)
 

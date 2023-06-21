@@ -1,7 +1,6 @@
 package be.ehb.gdt.nutrisearch.domain.product.entities
 
 import be.ehb.gdt.nutrisearch.domain.product.valueobjects.ServingSize
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
@@ -22,7 +21,6 @@ class Product(
     val id: String = ObjectId.get().toHexString(),
 ) {
     @Indexed
-    @JsonIgnore
     lateinit var ownerId: String
 
     override fun equals(other: Any?): Boolean {

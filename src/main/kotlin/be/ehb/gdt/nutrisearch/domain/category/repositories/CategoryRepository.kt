@@ -5,6 +5,7 @@ import be.ehb.gdt.nutrisearch.domain.category.entities.Category
 interface CategoryRepository {
     fun findAllCategories(): List<Category>
     fun findCategory(id: String): Category?
+    fun saveCategory(category: Category): Category
     fun insertCategory(category: Category): Category
     fun updateCategory(id: String, name: String)
     fun deleteCategory(id: String)

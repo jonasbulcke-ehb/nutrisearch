@@ -1,10 +1,8 @@
 package be.ehb.gdt.nutrisearch.domain.category.services
 
 import be.ehb.gdt.nutrisearch.domain.category.entities.Subcategory
-import be.ehb.gdt.nutrisearch.domain.category.exceptions.CategoryNotFoundException
-import be.ehb.gdt.nutrisearch.domain.category.exceptions.SubcategoryNotFoundException
 import be.ehb.gdt.nutrisearch.domain.category.repositories.SubcategoryRepository
-import org.junit.jupiter.api.AfterEach
+import be.ehb.gdt.nutrisearch.domain.exceptions.ResourceNotFoundException
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -40,24 +38,24 @@ class SubcategoryServiceImplTest {
 
         @Test
         fun `when get subcategories then throw exception`() {
-            val exception = assertThrows(CategoryNotFoundException::class.java) { service.getSubcategories(parentId) }
-            assertEquals("Category with identifier $parentId could not be found", exception.message)
+            val exception = assertThrows(ResourceNotFoundException::class.java) { service.getSubcategories(parentId) }
+            assertEquals("Resource of type Category with id $parentId could not be found", exception.message)
             verify(repo).existsParentCategoryById(parentId)
             verifyNoMoreInteractions(repo)
         }
 
         @Test
         fun `when subcategory exists and get subcategory then throw exception`() {
-            val exception = assertThrows(CategoryNotFoundException::class.java) { service.getSubcategory(parentId, id) }
-            assertEquals("Category with identifier $parentId could not be found", exception.message)
+            val exception = assertThrows(ResourceNotFoundException::class.java) { service.getSubcategory(parentId, id) }
+            assertEquals("Resource of type Category with id $parentId could not be found", exception.message)
             verify(repo).existsParentCategoryById(parentId)
             verifyNoMoreInteractions(repo)
         }
 
         @Test
         fun `when subcategory does not exist and get subcategory then throw exception`() {
-            val exception = assertThrows(CategoryNotFoundException::class.java) { service.getSubcategory(parentId, id) }
-            assertEquals("Category with identifier $parentId could not be found", exception.message)
+            val exception = assertThrows(ResourceNotFoundException::class.java) { service.getSubcategory(parentId, id) }
+            assertEquals("Resource of type Category with id $parentId could not be found", exception.message)
             verify(repo).existsParentCategoryById(parentId)
             verifyNoMoreInteractions(repo)
         }
@@ -65,8 +63,8 @@ class SubcategoryServiceImplTest {
         @Test
         fun `when create subcategory then throw exception`() {
             val exception =
-                assertThrows(CategoryNotFoundException::class.java) { service.createSubcategory(parentId, name) }
-            assertEquals("Category with identifier $parentId could not be found", exception.message)
+                assertThrows(ResourceNotFoundException::class.java) { service.createSubcategory(parentId, name) }
+            assertEquals("Resource of type Category with id $parentId could not be found", exception.message)
             verify(repo).existsParentCategoryById(parentId)
             verifyNoMoreInteractions(repo)
         }
@@ -82,9 +80,9 @@ class SubcategoryServiceImplTest {
         @Test
         fun `when subcategory does not exists and update subcategory then throw exception`() {
             val exception =
-                assertThrows(SubcategoryNotFoundException::class.java) { service.updateSubcategory(parentId, id, name) }
+                assertThrows(ResourceNotFoundException::class.java) { service.updateSubcategory(parentId, id, name) }
             assertEquals(
-                "Subcategory with parent category id $parentId and id $id could not be found",
+                "Resource of type Subcategory with id $id could not be found",
                 exception.message
             )
             verify(repo).existsSubcategoryById(parentId, id)
@@ -93,9 +91,9 @@ class SubcategoryServiceImplTest {
         @Test
         fun `when subcategory does not exists and delete subcategory then throw exception`() {
             val exception =
-                assertThrows(SubcategoryNotFoundException::class.java) { service.deleteSubcategory(parentId, id) }
+                assertThrows(ResourceNotFoundException::class.java) { service.deleteSubcategory(parentId, id) }
             assertEquals(
-                "Subcategory with parent category id $parentId and id $id could not be found",
+                "Resource of type Subcategory with id $id could not be found",
                 exception.message
             )
             verify(repo).existsSubcategoryById(parentId, id)
@@ -144,9 +142,9 @@ class SubcategoryServiceImplTest {
             whenever(repo.findSubcategory(parentId, id)).thenReturn(null)
 
             val exception =
-                assertThrows(SubcategoryNotFoundException::class.java) { service.getSubcategory(parentId, id) }
+                assertThrows(ResourceNotFoundException::class.java) { service.getSubcategory(parentId, id) }
             assertEquals(
-                "Subcategory with parent category id $parentId and id $id could not be found",
+                "Resource of type Subcategory with id $id could not be found",
                 exception.message
             )
             inOrder(repo).apply {
@@ -182,10 +180,21 @@ class SubcategoryServiceImplTest {
         }
 
         @Test
+        fun `when delete only subcategory then throw exception`() {
+            assertThrows(IllegalStateException::class.java) { service.deleteSubcategory(parentId, id) }
+            inOrder(repo).apply {
+                verify(repo).existsSubcategoryById(parentId, id)
+                verify(repo).countSubcategoriesByCategoryId(parentId)
+            }
+        }
+
+        @Test
         fun `when delete subcategory then delete subcategory`() {
+            whenever(repo.countSubcategoriesByCategoryId(parentId)).thenReturn(2)
             assertDoesNotThrow { service.deleteSubcategory(parentId, id) }
             inOrder(repo).apply {
                 verify(repo).existsSubcategoryById(parentId, id)
+                verify(repo).countSubcategoriesByCategoryId(parentId)
                 verify(repo).deleteSubcategory(parentId, id)
             }
         }

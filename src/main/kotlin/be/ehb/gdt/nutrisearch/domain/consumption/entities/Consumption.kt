@@ -1,13 +1,16 @@
 package be.ehb.gdt.nutrisearch.domain.consumption.entities
 
+import be.ehb.gdt.nutrisearch.domain.consumption.valueobjects.Meal
 import be.ehb.gdt.nutrisearch.domain.consumption.valueobjects.Product
 import be.ehb.gdt.nutrisearch.domain.product.entities.Preparation
 import be.ehb.gdt.nutrisearch.domain.product.valueobjects.ServingSize
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
+import org.springframework.data.mongodb.core.mapping.Document
 import java.time.LocalDate
 
+@Document("consumptions")
 class Consumption(
     val meal: Meal,
     val product: Product,

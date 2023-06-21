@@ -1,7 +1,11 @@
 package be.ehb.gdt.nutrisearch.domain.userinfo.entities
 
+import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.ActivityLevel
+import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.Sex
+import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.Study
 import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.WeightMeasurement
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonProperty
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.index.Indexed
@@ -15,8 +19,10 @@ class UserInfo(
     val activityLevel: ActivityLevel,
     val length: Int,
     val sex: Sex,
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    val currentStudy: Study? = null,
     val isPregnant: Boolean = false,
-    val isBreastFeeding: Boolean = false,
+    val isBreastfeeding: Boolean = false,
     val weightMeasurements: List<WeightMeasurement> = listOf(),
     @Id val id: String = ObjectId.get().toHexString()
 ) {

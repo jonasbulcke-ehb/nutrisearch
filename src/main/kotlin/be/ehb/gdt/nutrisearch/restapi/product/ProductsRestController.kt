@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*
 class ProductsRestController(private val service: ProductService) {
 
     @GetMapping
-    fun getProducts() = service.getProducts()
+    fun getProducts(@RequestParam(defaultValue = "false") ownProducts: Boolean) = service.getProducts(ownProducts)
 
     @GetMapping("/{id}")
     fun getProduct(@PathVariable id: String) = service.getProduct(id)

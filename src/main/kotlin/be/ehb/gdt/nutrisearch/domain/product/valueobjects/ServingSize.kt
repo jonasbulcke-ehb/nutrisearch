@@ -1,8 +1,8 @@
 package be.ehb.gdt.nutrisearch.domain.product.valueobjects
 
-class ServingSize(val grams: Double, val name: String) {
+class ServingSize(val grams: Int, val name: String) {
 
-    constructor() : this(1.0, "Gram")
+    constructor() : this(1, "Gram")
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

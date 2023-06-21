@@ -16,6 +16,11 @@ class ProductMongoRepository(private val mongoTemplate: MongoTemplate) : Product
         return mongoTemplate.find(query, Product::class.java)
     }
 
+    override fun findAllProductsByOwnerId(ownerId: String): List<Product> {
+        val query = Query(Criteria.where("ownerId").`is`(ownerId))
+        return mongoTemplate.find(query, Product::class.java)
+    }
+
     override fun findProductById(id: String): Product? = mongoTemplate.findById(id, Product::class.java)
 
     override fun saveProduct(product: Product): Product = mongoTemplate.save(product)

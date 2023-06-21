@@ -1,8 +1,9 @@
 package be.ehb.gdt.nutrisearch.domain.category.services
 
 import be.ehb.gdt.nutrisearch.domain.category.entities.Category
-import be.ehb.gdt.nutrisearch.domain.category.exceptions.CategoryNotFoundException
 import be.ehb.gdt.nutrisearch.domain.category.repositories.CategoryRepository
+import be.ehb.gdt.nutrisearch.domain.exceptions.ResourceDoesNotMatchIdException
+import be.ehb.gdt.nutrisearch.domain.exceptions.ResourceNotFoundException
 import org.springframework.stereotype.Service
 
 @Service
@@ -10,20 +11,29 @@ class CategoryServiceImpl(private val repo: CategoryRepository) : CategoryServic
     override fun getCategories() = repo.findAllCategories()
 
     override fun getCategory(id: String) =
-        repo.findCategory(id) ?: throw CategoryNotFoundException(id)
+        repo.findCategory(id) ?: throw ResourceNotFoundException(Category::class.java, id)
 
-    override fun createCategory(name: String) = repo.insertCategory(Category(name))
+    override fun createCategory(category: Category): Category {
+        check(category.subcategories.isNotEmpty()) { "Category needs to contain at least one subcategory" }
+        return repo.saveCategory(category)
+    }
 
-    override fun updateCategory(id: String, name: String) {
-        if(!repo.existsCategoryById(id)) {
-            throw CategoryNotFoundException(id)
+    override fun updateCategory(id: String, category: Category) {
+        if (category.id != id) {
+            throw ResourceDoesNotMatchIdException(category.id, id)
         }
-        repo.updateCategory(id, name)
+        if (!repo.existsCategoryById(id)) {
+            throw ResourceNotFoundException(Category::class.java, id)
+        }
+        check(category.subcategories.isNotEmpty()) {
+            "Category needs to contain at least one subcategory"
+        }
+        repo.saveCategory(category)
     }
 
     override fun deleteCategory(id: String) {
-        if(!repo.existsCategoryById(id)) {
-            throw CategoryNotFoundException(id)
+        if (!repo.existsCategoryById(id)) {
+            throw ResourceNotFoundException(Category::class.java, id)
         }
         repo.deleteCategory(id)
     }

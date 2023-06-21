@@ -13,6 +13,7 @@ class CategoryMongoRepository(private val mongoTemplate: MongoTemplate) : Catego
     override fun findAllCategories(): List<Category> = mongoTemplate.findAll(Category::class.java)
 
     override fun findCategory(id: String) = mongoTemplate.findById(id, Category::class.java)
+    override fun saveCategory(category: Category) = mongoTemplate.save(category)
 
     override fun insertCategory(category: Category) = mongoTemplate.insert(category)
 

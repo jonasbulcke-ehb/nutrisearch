@@ -9,7 +9,7 @@ Feature: UserInfoRestController
     When I PATCH "/api/v1/userinfo" with content "userinfo/updatable-userinfo.json"
     Then I expect status <patchResponse>
     When I POST "/api/v1/userinfo/weight" with content "userinfo/weight.json"
-    Then I expect status <patchResponse>
+    Then I expect status <postWeightResponse>
     When I GET "/api/v1/userinfo"
     Then I expect status <getResponse>
     And I expect the response body to contain <json>
@@ -21,9 +21,21 @@ Feature: UserInfoRestController
     Then I expect status 200
     And I expect the response body to contain boolean "false"
     Examples:
-      | userInfoId | authId | getResponse | hasUserInfo | postResponse | patchResponse | json                     |
-      | userinfo-1 | user   | 200         | true        | 400          | 204           | "userinfo/userinfo.json" |
-      | userinfo-2 | anon   | 404         | false       | 201          | 404           | nothing                  |
+      | userInfoId | authId | getResponse | hasUserInfo | postResponse | patchResponse | postWeightResponse | json                     |
+      | userinfo-1 | user   | 200         | true        | 400          | 200           | 204                | "userinfo/userinfo.json" |
+      | userinfo-2 | anon   | 403         | false       | 201          | 403           | 403                | nothing                  |
 
 
-
+  Scenario: GET userinfo with studies
+    Given an userInfo with id "userinfo-3" and authId "participant"
+    And authenticated user with authId "participant"
+    Given the following studies
+      | subject   | startDate  | endDate    | id      |
+      | subject-1 | 2022-12-01 | 2023-04-04 | study-1 |
+      | subject-2 | 2023-01-02 |            | study-2 |
+    When I POST "/api/v1/studies/study-2/join"
+    Then I expect status 204
+    When I GET "/api/v1/userinfo"
+    Then I expect status 200
+    When I GET "/api/v1/studies"
+    Then I expect status 200

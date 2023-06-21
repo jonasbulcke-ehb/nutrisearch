@@ -1,4 +1,4 @@
-package be.ehb.gdt.nutrisearch.domain.consumption.entities
+package be.ehb.gdt.nutrisearch.domain.consumption.valueobjects
 
 enum class Meal {
     Breakfast,

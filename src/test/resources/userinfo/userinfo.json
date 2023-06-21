@@ -3,12 +3,12 @@
   "activityLevel": "NotActive",
   "length": 188,
   "isPregnant": false,
-  "isBreastFeeding": false,
+  "isBreastfeeding": false,
   "sex": "Male",
   "weightMeasurements": [
     {
       "value": 88,
-      "measuredAt": "2023-05-31T08:12:57"
+      "timestamp": "2023-05-31T08:12:57"
     }
   ]
 }
