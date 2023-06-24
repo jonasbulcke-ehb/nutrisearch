@@ -1,4 +1,4 @@
-package be.ehb.gdt.nutrisearch.domain.consumption.service
+package be.ehb.gdt.nutrisearch.domain.consumption.services
 
 import be.ehb.gdt.nutrisearch.domain.consumption.entities.Consumption
 import be.ehb.gdt.nutrisearch.domain.consumption.repositories.ConsumptionRepository
@@ -9,6 +9,7 @@ import be.ehb.gdt.nutrisearch.domain.userinfo.exceptions.NoUserInfoForAuthentica
 import be.ehb.gdt.nutrisearch.domain.userinfo.repositories.UserInfoRepository
 import be.ehb.gdt.nutrisearch.restapi.auth.services.AuthenticationFacade
 import org.springframework.stereotype.Component
+import java.io.OutputStream
 import java.time.LocalDate
 
 @Component
@@ -24,7 +25,8 @@ class ConsumptionServiceImpl(
     }
 
     override fun getConsumptionById(id: String): Consumption {
-        val consumption = consumptionRepo.findConsumptionById(id) ?: throw ResourceNotFoundException(Consumption::class.java, id)
+        val consumption =
+            consumptionRepo.findConsumptionById(id) ?: throw ResourceNotFoundException(Consumption::class.java, id)
         if (consumption.userInfoId != getUserInfoId() && !authFacade.isInRole("dietitian")) {
             throw ForbiddenOperationException("Forbidden to retrieve consumption with id $id")
         }
@@ -69,6 +71,13 @@ class ConsumptionServiceImpl(
         }
 
         consumptionRepo.deleteConsumption(id)
+    }
+
+    override fun exportToExcel(timestamp: LocalDate, outputStream: OutputStream) {
+//        TODO("Use userInfoId instead of hard coded value")
+        val consumptions =
+            consumptionRepo.findConsumptionsByTimestampAndUserInfoId(timestamp, "6489ce47c7f28f1ddbddb029")
+        IndividualConsumptionsExcelWriter(consumptions, timestamp.toString()).write(outputStream)
     }
 
     private fun getUserInfoId() =

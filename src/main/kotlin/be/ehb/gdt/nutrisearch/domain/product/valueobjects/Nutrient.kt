@@ -40,4 +40,9 @@ enum class Nutrient(
     VitaminE("µg", false);
 
     constructor(isMacroNutrient: Boolean) : this("mg", isMacroNutrient)
+
+    companion object {
+        val macroNutrients = values().filter { it.isMacroNutrient }
+        val microNutrients = values().filter { !it.isMacroNutrient }
+    }
 }

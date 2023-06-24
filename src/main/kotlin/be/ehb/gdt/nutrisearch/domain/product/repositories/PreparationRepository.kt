@@ -10,4 +10,5 @@ interface PreparationRepository {
     fun deletePreparation(productId: String, id: String)
     fun existsProductById(productId: String): Boolean
     fun existsPreparationsById(productId: String, id: String): Boolean
+    fun belongsToOwnerId(productId: String, ownerId: String): Boolean
 }

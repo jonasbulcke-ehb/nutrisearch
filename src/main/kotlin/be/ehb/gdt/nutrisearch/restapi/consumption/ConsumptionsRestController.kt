@@ -1,16 +1,19 @@
 package be.ehb.gdt.nutrisearch.restapi.consumption
 
 import be.ehb.gdt.nutrisearch.domain.consumption.entities.Consumption
-import be.ehb.gdt.nutrisearch.domain.consumption.service.ConsumptionService
+import be.ehb.gdt.nutrisearch.domain.consumption.services.ConsumptionService
+import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 @RestController
 @RequestMapping("/api/v1/consumptions")
 class ConsumptionsRestController(private val service: ConsumptionService) {
-
     @GetMapping
     fun getConsumptions(@RequestParam timestamp: LocalDate) = service.getConsumptionsByTimestamp(timestamp)
 
@@ -30,4 +33,15 @@ class ConsumptionsRestController(private val service: ConsumptionService) {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteConsumption(@PathVariable id: String) = service.deleteConsumption(id)
+
+    @GetMapping("/export-to-excel")
+    fun exportConsumptions(@RequestParam timestamp: LocalDate, response: HttpServletResponse) {
+        val currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HHmmss"))
+        response.apply {
+            contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE
+            setHeader("Content-Disposition", "attachment; filename= $currentTime.xlsx")
+        }.also {
+            service.exportToExcel(timestamp, response.outputStream)
+        }
+    }
 }

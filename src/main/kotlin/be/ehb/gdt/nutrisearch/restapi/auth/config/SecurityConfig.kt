@@ -28,7 +28,7 @@ class SecurityConfig {
             .requestMatchers("/api/v1/categories/**").hasRole("dietitian")
             .requestMatchers("/api/v1/products/{id}/verify").hasRole("dietitian")
             .requestMatchers(HttpMethod.GET, "/api/v1/products/{productId}/preparations/**").authenticated()
-            .requestMatchers("/api/v1/products/{productId}/preparations/**").hasRole("dietitian")
+            .requestMatchers("/api/v1/products/{productId}/preparations/**").authenticated()
             .requestMatchers("/api/v1/userinfo/has-userinfo").authenticated()
             .requestMatchers("/api/v1/userinfo/weight").authenticated()
             .requestMatchers("/api/v1/userinfo/{id}").hasRole("dietitian")

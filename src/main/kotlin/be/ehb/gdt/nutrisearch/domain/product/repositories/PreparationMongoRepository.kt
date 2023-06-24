@@ -42,9 +42,16 @@ class PreparationMongoRepository(private val mongoTemplate: MongoTemplate) : Pre
         val query = Query(Criteria.where("_id").`is`(productId))
         return mongoTemplate.exists(query, Product::class.java)
     }
+
     override fun existsPreparationsById(productId: String, id: String): Boolean {
         val query = Query(Criteria.where("_id").`is`(productId).and("preparations._id").`is`(id))
         return mongoTemplate.exists(query, Product::class.java)
+    }
+
+    override fun belongsToOwnerId(productId: String, ownerId: String): Boolean {
+        return Query(Criteria.where("_id").`is`(productId).and("ownerId").`is`(ownerId)).let {
+            mongoTemplate.exists(it, Product::class.java)
+        }
     }
 
 }

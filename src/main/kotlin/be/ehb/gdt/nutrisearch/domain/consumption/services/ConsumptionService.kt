@@ -1,6 +1,7 @@
-package be.ehb.gdt.nutrisearch.domain.consumption.service
+package be.ehb.gdt.nutrisearch.domain.consumption.services
 
 import be.ehb.gdt.nutrisearch.domain.consumption.entities.Consumption
+import java.io.OutputStream
 import java.time.LocalDate
 
 interface ConsumptionService {
@@ -9,4 +10,5 @@ interface ConsumptionService {
     fun createConsumption(consumption: Consumption): Consumption
     fun updateConsumption(id: String, consumption: Consumption)
     fun deleteConsumption(id: String)
+    fun exportToExcel(timestamp: LocalDate, outputStream: OutputStream)
 }
