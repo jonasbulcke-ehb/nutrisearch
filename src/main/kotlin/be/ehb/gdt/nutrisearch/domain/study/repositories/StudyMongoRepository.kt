@@ -1,9 +1,12 @@
 package be.ehb.gdt.nutrisearch.domain.study.repositories
 
+import be.ehb.gdt.nutrisearch.domain.consumption.entities.Consumption
 import be.ehb.gdt.nutrisearch.domain.study.entities.Study
 import be.ehb.gdt.nutrisearch.domain.study.valueobjects.UpdatableStudy
 import be.ehb.gdt.nutrisearch.domain.userinfo.entities.UserInfo
+import org.bson.types.ObjectId
 import org.springframework.data.mongodb.core.MongoTemplate
+import org.springframework.data.mongodb.core.aggregation.Aggregation
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.core.query.Update
@@ -52,7 +55,7 @@ class StudyMongoRepository(private val mongoTemplate: MongoTemplate) : StudyRepo
 
     override fun addParticipant(studyId: String, userInfoId: String) {
         val query = Query(Criteria.where("_id").`is`(studyId))
-        val update = Update().push("participants", userInfoId)
+        val update = Update().push("participants", ObjectId(userInfoId))
         mongoTemplate.updateFirst(query, update, Study::class.java)
     }
 
@@ -78,5 +81,24 @@ class StudyMongoRepository(private val mongoTemplate: MongoTemplate) : StudyRepo
         return Query(Criteria.where("_id").`is`(id)).let {
             mongoTemplate.exists(it, Study::class.java)
         }
+    }
+
+    override fun findConsumptionsByStudyId(id: String, timestamp: LocalDate): List<Consumption> {
+        val matchStudyIdStage = Aggregation.match(Criteria.where("_id").`is`(id))
+        val lookupStage = Aggregation.lookup("consumptions", "participants", "userInfoId", "consumptions")
+        val unwindStage = Aggregation.unwind("consumptions")
+        val replaceRootStage = Aggregation.replaceRoot("consumptions")
+        val matchTimestampStage = Aggregation.match(Criteria.where("timestamp").`is`(timestamp.toString()))
+        return mongoTemplate.aggregate(
+            Aggregation.newAggregation(
+                matchStudyIdStage,
+                lookupStage,
+                unwindStage,
+                replaceRootStage,
+                matchTimestampStage
+            ),
+            Study::class.java,
+            Consumption::class.java
+        ).mappedResults
     }
 }

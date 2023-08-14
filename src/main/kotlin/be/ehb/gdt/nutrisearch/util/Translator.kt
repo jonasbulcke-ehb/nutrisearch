@@ -3,6 +3,7 @@ package be.ehb.gdt.nutrisearch.util
 
 import be.ehb.gdt.nutrisearch.domain.consumption.valueobjects.Meal
 import be.ehb.gdt.nutrisearch.domain.product.valueobjects.Nutrient
+import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.ActivityLevel
 
 @SuppressWarnings("kotlin:S1479")
 fun getAbbreviation(nutrient: Nutrient): String {
@@ -52,3 +53,14 @@ fun getMealName(meal: Meal): String {
         Meal.Snacks -> "Tussendoor"
     }
 }
+
+fun getActivityLevel(activityLevel: ActivityLevel): String {
+    return when(activityLevel) {
+        ActivityLevel.NotActive -> "Niet actief"
+        ActivityLevel.LightlyActive -> "Licht actief"
+        ActivityLevel.Active -> "Actief"
+        ActivityLevel.VeryActive -> "Zeer actief"
+    }
+}
+
+fun booleanToYesNo(boolean: Boolean) = if(boolean) "Ja" else "Nee"

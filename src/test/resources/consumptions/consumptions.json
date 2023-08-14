@@ -1,0 +1,962 @@
+[{
+  "_id": {
+    "$oid": "648d9d3ce61e951e757d483f"
+  },
+  "meal": "Lunch",
+  "product": {
+    "_id": {
+      "$oid": "6468be9549f4491e76443158"
+    },
+    "name": "Volkoren brood"
+  },
+  "servingSize": {
+    "grams": 1,
+    "name": "Gram"
+  },
+  "preparation": {
+    "_id": {
+      "$oid": "6468b8c949f4491e76443155"
+    },
+    "name": "Onbereid",
+    "nutrients": {
+      "Energy": null,
+      "Protein": null,
+      "Fat": null,
+      "SaturatedFattyAcid": null,
+      "PolyUnsaturatedFattyAcid": null,
+      "MonoUnsaturatedFattyAcid": null,
+      "Omega3FattyAcid": null,
+      "Omega6FattyAcid": null,
+      "LinoleicAcid": null,
+      "TransFattyAcid": null,
+      "Cholesterol": null,
+      "Carbohydrates": 40,
+      "Sugar": null,
+      "Fiber": null,
+      "Water": null
+    }
+  },
+  "amount": 30,
+  "timestamp": {
+    "$date": "2023-06-16T22:00:00.000Z"
+  },
+  "userInfoId": "647487d2f7811144213c8ee5"
+},
+{
+  "_id": {
+    "$oid": "648d9f94942d5f3092555e1f"
+  },
+  "meal": "Dinner",
+  "product": {
+    "_id": {
+      "$oid": "648c9afa90570a500cb3e853"
+    },
+    "name": "Appel"
+  },
+  "servingSize": {
+    "grams": 50,
+    "name": "Stuk"
+  },
+  "preparation": {
+    "_id": {
+      "$oid": "648c9afa90570a500cb3e852"
+    },
+    "name": "Onbereid",
+    "nutrients": {
+      "Energy": 99,
+      "Protein": 99,
+      "Fat": 99,
+      "SaturatedFattyAcid": 99,
+      "PolyUnsaturatedFattyAcid": 99,
+      "MonoUnsaturatedFattyAcid": 99,
+      "Omega3FattyAcid": null,
+      "Omega6FattyAcid": null,
+      "LinoleicAcid": null,
+      "TransFattyAcid": null,
+      "Cholesterol": null,
+      "Carbohydrates": 10,
+      "Sugar": null,
+      "Fiber": null,
+      "Water": null,
+      "Sodium": 2,
+      "Potassium": 2,
+      "Calcium": null,
+      "Phosphor": null,
+      "Magnesium": null,
+      "Iron": null,
+      "Copper": null,
+      "Zinc": null,
+      "Iodine": null,
+      "Selenium": null,
+      "VitaminA": null,
+      "VitaminB1": null,
+      "VitaminB2": null,
+      "VitaminB12": null,
+      "Folate": null,
+      "VitaminC": null,
+      "VitaminD": null,
+      "VitaminE": null
+    }
+  },
+  "amount": 1,
+  "timestamp": {
+    "$date": "2023-06-16T22:00:00.000Z"
+  },
+  "userInfoId": "647487d2f7811144213c8ee5"
+},
+{
+  "_id": {
+    "$oid": "648dbd9f942d5f3092555e26"
+  },
+  "meal": "Lunch",
+  "product": {
+    "_id": {
+      "$oid": "648dba9a942d5f3092555e21"
+    },
+    "name": "Perzik"
+  },
+  "servingSize": {
+    "grams": 1,
+    "name": "Gram"
+  },
+  "preparation": {
+    "_id": {
+      "$oid": "648dba9a942d5f3092555e20"
+    },
+    "name": "Onbereid",
+    "nutrients": {
+      "Energy": 20,
+      "Protein": 2,
+      "Fat": 1,
+      "SaturatedFattyAcid": 0,
+      "PolyUnsaturatedFattyAcid": null,
+      "MonoUnsaturatedFattyAcid": null,
+      "Omega3FattyAcid": null,
+      "Omega6FattyAcid": null,
+      "LinoleicAcid": null,
+      "TransFattyAcid": null,
+      "Cholesterol": null,
+      "Carbohydrates": 12,
+      "Sugar": 11,
+      "Starch": null,
+      "Fiber": 6,
+      "Water": null,
+      "Sodium": 1,
+      "Potassium": null,
+      "Calcium": null,
+      "Phosphor": null,
+      "Magnesium": null,
+      "Iron": null,
+      "Copper": null,
+      "Zinc": null,
+      "Iodine": null,
+      "Selenium": null,
+      "VitaminA": null,
+      "VitaminB1": null,
+      "VitaminB2": null,
+      "VitaminB12": null,
+      "Folate": null,
+      "VitaminC": null,
+      "VitaminD": null,
+      "VitaminE": null
+    }
+  },
+  "amount": 80,
+  "timestamp": {
+    "$date": "2023-06-16T22:00:00.000Z"
+  },
+  "userInfoId": "6482f910c65bb8a676f5cd7d"
+},
+{
+  "_id": {
+    "$oid": "648f2b308e86b51c3ef0f357"
+  },
+  "meal": "Lunch",
+  "product": {
+    "_id": {
+      "$oid": "648c9afa90570a500cb3e853"
+    },
+    "name": "Appel"
+  },
+  "servingSize": {
+    "grams": 105,
+    "name": "Stuk"
+  },
+  "preparation": {
+    "_id": {
+      "$oid": "648c9afa90570a500cb3e852"
+    },
+    "name": "Onbereid",
+    "nutrients": {
+      "Energy": 99,
+      "Protein": 99,
+      "Fat": 99,
+      "SaturatedFattyAcid": 99,
+      "PolyUnsaturatedFattyAcid": 99,
+      "MonoUnsaturatedFattyAcid": 99,
+      "Omega3FattyAcid": null,
+      "Omega6FattyAcid": null,
+      "LinoleicAcid": null,
+      "TransFattyAcid": null,
+      "Cholesterol": null,
+      "Carbohydrates": null,
+      "Sugar": null,
+      "Fiber": null,
+      "Water": null,
+      "Sodium": 2,
+      "Potassium": 2,
+      "Calcium": null,
+      "Phosphor": null,
+      "Magnesium": null,
+      "Iron": null,
+      "Copper": null,
+      "Zinc": null,
+      "Iodine": null,
+      "Selenium": null,
+      "VitaminA": null,
+      "VitaminB1": null,
+      "VitaminB2": null,
+      "VitaminB12": null,
+      "Folate": null,
+      "VitaminC": null,
+      "VitaminD": null,
+      "VitaminE": null
+    }
+  },
+  "amount": 1,
+  "timestamp": {
+    "$date": "2023-06-17T22:00:00.000Z"
+  },
+  "userInfoId": "647487d2f7811144213c8ee5"
+},
+{
+  "_id": {
+    "$oid": "6490a96abfd74c6a7c5b7f43"
+  },
+  "meal": "Breakfast",
+  "product": {
+    "_id": {
+      "$oid": "648c9e3290570a500cb3e857"
+    },
+    "name": "Banaan"
+  },
+  "servingSize": {
+    "grams": 120,
+    "name": "Stuk"
+  },
+  "preparation": {
+    "_id": {
+      "$oid": "648c9e3290570a500cb3e856"
+    },
+    "name": "Onbereid",
+    "nutrients": {
+      "Energy": null,
+      "Protein": null,
+      "Fat": 18,
+      "SaturatedFattyAcid": null,
+      "PolyUnsaturatedFattyAcid": null,
+      "MonoUnsaturatedFattyAcid": null,
+      "Omega3FattyAcid": null,
+      "Omega6FattyAcid": null,
+      "LinoleicAcid": null,
+      "TransFattyAcid": null,
+      "Cholesterol": null,
+      "Carbohydrates": 20,
+      "Sugar": null,
+      "Fiber": null,
+      "Water": null,
+      "Sodium": null,
+      "Potassium": null,
+      "Calcium": null,
+      "Phosphor": null,
+      "Magnesium": null,
+      "Iron": null,
+      "Copper": null,
+      "Zinc": null,
+      "Iodine": null,
+      "Selenium": null,
+      "VitaminA": null,
+      "VitaminB1": null,
+      "VitaminB2": null,
+      "VitaminB12": null,
+      "Folate": null,
+      "VitaminC": null,
+      "VitaminD": null,
+      "VitaminE": null
+    }
+  },
+  "amount": 1,
+  "timestamp": {
+    "$date": "2023-06-18T22:00:00.000Z"
+  },
+  "userInfoId": "6482f910c65bb8a676f5cd7d"
+},
+{
+  "_id": {
+    "$oid": "6490afffbfd74c6a7c5b7f47"
+  },
+  "meal": "Snacks",
+  "product": {
+    "_id": {
+      "$oid": "648c9afa90570a500cb3e853"
+    },
+    "name": "Appel"
+  },
+  "servingSize": {
+    "grams": 105,
+    "name": "Stuk"
+  },
+  "preparation": {
+    "_id": {
+      "$oid": "648c9afa90570a500cb3e852"
+    },
+    "name": "Onbereid",
+    "nutrients": {
+      "Energy": 99,
+      "Protein": 99,
+      "Fat": 99,
+      "SaturatedFattyAcid": 99,
+      "PolyUnsaturatedFattyAcid": 99,
+      "MonoUnsaturatedFattyAcid": 99,
+      "Omega3FattyAcid": null,
+      "Omega6FattyAcid": null,
+      "LinoleicAcid": null,
+      "TransFattyAcid": null,
+      "Cholesterol": null,
+      "Carbohydrates": null,
+      "Sugar": null,
+      "Fiber": null,
+      "Water": null,
+      "Sodium": 2,
+      "Potassium": 2,
+      "Calcium": null,
+      "Phosphor": null,
+      "Magnesium": null,
+      "Iron": null,
+      "Copper": null,
+      "Zinc": null,
+      "Iodine": null,
+      "Selenium": null,
+      "VitaminA": null,
+      "VitaminB1": null,
+      "VitaminB2": null,
+      "VitaminB12": null,
+      "Folate": null,
+      "VitaminC": null,
+      "VitaminD": null,
+      "VitaminE": null
+    }
+  },
+  "amount": 1,
+  "timestamp": {
+    "$date": "2023-06-17T22:00:00.000Z"
+  },
+  "userInfoId": "647487d2f7811144213c8ee5"
+},
+{
+  "_id": {
+    "$oid": "6490b061bfd74c6a7c5b7f4a"
+  },
+  "meal": "Breakfast",
+  "product": {
+    "_id": {
+      "$oid": "648c9e3290570a500cb3e857"
+    },
+    "name": "Banaan"
+  },
+  "servingSize": {
+    "grams": 1,
+    "name": "Gram"
+  },
+  "preparation": {
+    "_id": {
+      "$oid": "648c9e3290570a500cb3e856"
+    },
+    "name": "Onbereid",
+    "nutrients": {
+      "Energy": null,
+      "Protein": null,
+      "Fat": null,
+      "SaturatedFattyAcid": null,
+      "PolyUnsaturatedFattyAcid": null,
+      "MonoUnsaturatedFattyAcid": null,
+      "Omega3FattyAcid": null,
+      "Omega6FattyAcid": null,
+      "LinoleicAcid": null,
+      "TransFattyAcid": null,
+      "Cholesterol": null,
+      "Carbohydrates": null,
+      "Sugar": null,
+      "Fiber": null,
+      "Water": null,
+      "Sodium": null,
+      "Potassium": null,
+      "Calcium": null,
+      "Phosphor": null,
+      "Magnesium": null,
+      "Iron": null,
+      "Copper": null,
+      "Zinc": null,
+      "Iodine": null,
+      "Selenium": null,
+      "VitaminA": null,
+      "VitaminB1": null,
+      "VitaminB2": null,
+      "VitaminB12": null,
+      "Folate": null,
+      "VitaminC": null,
+      "VitaminD": null,
+      "VitaminE": null
+    }
+  },
+  "amount": 1,
+  "timestamp": {
+    "$date": "2023-06-17T22:00:00.000Z"
+  },
+  "userInfoId": "647487d2f7811144213c8ee5"
+},
+{
+  "_id": {
+    "$oid": "6490b076bfd74c6a7c5b7f4b"
+  },
+  "meal": "Breakfast",
+  "product": {
+    "_id": {
+      "$oid": "648c9afa90570a500cb3e853"
+    },
+    "name": "Appel"
+  },
+  "servingSize": {
+    "grams": 105,
+    "name": "Stuk"
+  },
+  "preparation": {
+    "_id": {
+      "$oid": "648c9afa90570a500cb3e852"
+    },
+    "name": "Onbereid",
+    "nutrients": {
+      "Energy": 99,
+      "Protein": 99,
+      "Fat": 99,
+      "SaturatedFattyAcid": 99,
+      "PolyUnsaturatedFattyAcid": 99,
+      "MonoUnsaturatedFattyAcid": 99,
+      "Omega3FattyAcid": null,
+      "Omega6FattyAcid": null,
+      "LinoleicAcid": null,
+      "TransFattyAcid": null,
+      "Cholesterol": null,
+      "Carbohydrates": null,
+      "Sugar": null,
+      "Fiber": null,
+      "Water": null,
+      "Sodium": 2,
+      "Potassium": 2,
+      "Calcium": null,
+      "Phosphor": null,
+      "Magnesium": null,
+      "Iron": null,
+      "Copper": null,
+      "Zinc": null,
+      "Iodine": null,
+      "Selenium": null,
+      "VitaminA": null,
+      "VitaminB1": null,
+      "VitaminB2": null,
+      "VitaminB12": null,
+      "Folate": null,
+      "VitaminC": null,
+      "VitaminD": null,
+      "VitaminE": null
+    }
+  },
+  "amount": 1,
+  "timestamp": {
+    "$date": "2023-06-16T22:00:00.000Z"
+  },
+  "userInfoId": "647487d2f7811144213c8ee5"
+},
+{
+  "_id": {
+    "$oid": "6490b13bbfd74c6a7c5b7f4d"
+  },
+  "meal": "Lunch",
+  "product": {
+    "_id": {
+      "$oid": "6468be9549f4491e76443158"
+    },
+    "name": "Volkoren brood"
+  },
+  "servingSize": {
+    "grams": 1,
+    "name": "Gram"
+  },
+  "preparation": {
+    "_id": {
+      "$oid": "6468b8c949f4491e76443155"
+    },
+    "name": "Onbereid",
+    "nutrients": {
+      "Energy": null,
+      "Protein": null,
+      "Fat": null,
+      "SaturatedFattyAcid": null,
+      "PolyUnsaturatedFattyAcid": null,
+      "MonoUnsaturatedFattyAcid": null,
+      "Omega3FattyAcid": null,
+      "Omega6FattyAcid": null,
+      "LinoleicAcid": null,
+      "TransFattyAcid": null,
+      "Cholesterol": null,
+      "Carbohydrates": null,
+      "Sugar": null,
+      "Fiber": null,
+      "Water": null
+    }
+  },
+  "amount": 1,
+  "timestamp": {
+    "$date": "2023-06-15T22:00:00.000Z"
+  },
+  "userInfoId": "647487d2f7811144213c8ee5"
+},
+{
+  "_id": {
+    "$oid": "6490b167bfd74c6a7c5b7f4e"
+  },
+  "meal": "Dinner",
+  "product": {
+    "_id": {
+      "$oid": "648c9e3290570a500cb3e857"
+    },
+    "name": "Banaan"
+  },
+  "servingSize": {
+    "grams": 1,
+    "name": "Gram"
+  },
+  "preparation": {
+    "_id": {
+      "$oid": "648c9e3290570a500cb3e856"
+    },
+    "name": "Onbereid",
+    "nutrients": {
+      "Energy": null,
+      "Protein": null,
+      "Fat": null,
+      "SaturatedFattyAcid": null,
+      "PolyUnsaturatedFattyAcid": null,
+      "MonoUnsaturatedFattyAcid": null,
+      "Omega3FattyAcid": null,
+      "Omega6FattyAcid": null,
+      "LinoleicAcid": null,
+      "TransFattyAcid": null,
+      "Cholesterol": null,
+      "Carbohydrates": null,
+      "Sugar": null,
+      "Fiber": null,
+      "Water": null,
+      "Sodium": null,
+      "Potassium": null,
+      "Calcium": null,
+      "Phosphor": null,
+      "Magnesium": null,
+      "Iron": null,
+      "Copper": null,
+      "Zinc": null,
+      "Iodine": null,
+      "Selenium": null,
+      "VitaminA": null,
+      "VitaminB1": null,
+      "VitaminB2": null,
+      "VitaminB12": null,
+      "Folate": null,
+      "VitaminC": null,
+      "VitaminD": null,
+      "VitaminE": null
+    }
+  },
+  "amount": 1,
+  "timestamp": {
+    "$date": "2023-06-15T22:00:00.000Z"
+  },
+  "userInfoId": "647487d2f7811144213c8ee5"
+},
+{
+  "_id": {
+    "$oid": "6490b22fbfd74c6a7c5b7f50"
+  },
+  "meal": "Breakfast",
+  "product": {
+    "_id": {
+      "$oid": "648dc1a9942d5f3092555e2a"
+    },
+    "name": "Banaan"
+  },
+  "servingSize": {
+    "grams": 1,
+    "name": "Gram"
+  },
+  "preparation": {
+    "_id": {
+      "$oid": "648dc1a9942d5f3092555e29"
+    },
+    "name": "Onbereid",
+    "nutrients": {
+      "Energy": 200,
+      "Protein": 2,
+      "Fat": 22,
+      "SaturatedFattyAcid": 2,
+      "PolyUnsaturatedFattyAcid": null,
+      "MonoUnsaturatedFattyAcid": null,
+      "Omega3FattyAcid": null,
+      "Omega6FattyAcid": null,
+      "LinoleicAcid": null,
+      "TransFattyAcid": null,
+      "Cholesterol": null,
+      "Carbohydrates": 22,
+      "Sugar": 18,
+      "Starch": null,
+      "Fiber": 2,
+      "Water": null,
+      "Sodium": 2,
+      "Potassium": null,
+      "Calcium": null,
+      "Phosphor": null,
+      "Magnesium": null,
+      "Iron": null,
+      "Copper": null,
+      "Zinc": null,
+      "Iodine": null,
+      "Selenium": null,
+      "VitaminA": null,
+      "VitaminB1": null,
+      "VitaminB2": null,
+      "VitaminB12": null,
+      "Folate": null,
+      "VitaminC": null,
+      "VitaminD": null,
+      "VitaminE": null
+    }
+  },
+  "amount": 1,
+  "timestamp": {
+    "$date": "2023-06-13T22:00:00.000Z"
+  },
+  "userInfoId": "647487d2f7811144213c8ee5"
+},
+{
+  "_id": {
+    "$oid": "6490b278bfd74c6a7c5b7f51"
+  },
+  "meal": "Breakfast",
+  "product": {
+    "_id": {
+      "$oid": "648c9e3290570a500cb3e857"
+    },
+    "name": "Banaan"
+  },
+  "servingSize": {
+    "grams": 1,
+    "name": "Gram"
+  },
+  "preparation": {
+    "_id": {
+      "$oid": "648c9e3290570a500cb3e856"
+    },
+    "name": "Onbereid",
+    "nutrients": {
+      "Energy": null,
+      "Protein": null,
+      "Fat": null,
+      "SaturatedFattyAcid": null,
+      "PolyUnsaturatedFattyAcid": null,
+      "MonoUnsaturatedFattyAcid": null,
+      "Omega3FattyAcid": null,
+      "Omega6FattyAcid": null,
+      "LinoleicAcid": null,
+      "TransFattyAcid": null,
+      "Cholesterol": null,
+      "Carbohydrates": null,
+      "Sugar": null,
+      "Fiber": null,
+      "Water": null,
+      "Sodium": null,
+      "Potassium": null,
+      "Calcium": null,
+      "Phosphor": null,
+      "Magnesium": null,
+      "Iron": null,
+      "Copper": null,
+      "Zinc": null,
+      "Iodine": null,
+      "Selenium": null,
+      "VitaminA": null,
+      "VitaminB1": null,
+      "VitaminB2": null,
+      "VitaminB12": null,
+      "Folate": null,
+      "VitaminC": null,
+      "VitaminD": null,
+      "VitaminE": null
+    }
+  },
+  "amount": 1,
+  "timestamp": {
+    "$date": "2023-06-14T22:00:00.000Z"
+  },
+  "userInfoId": "647487d2f7811144213c8ee5"
+},
+{
+  "_id": {
+    "$oid": "649af46ae422cf09d426a0c2"
+  },
+  "meal": "Breakfast",
+  "product": {
+    "_id": {
+      "$oid": "649af408e422cf09d426a0c1"
+    },
+    "name": "Banaan"
+  },
+  "servingSize": {
+    "grams": 1,
+    "name": "Gram"
+  },
+  "preparation": {
+    "_id": {
+      "$oid": "649af408e422cf09d426a0c0"
+    },
+    "name": "Onbereid",
+    "nutrients": {
+      "Energy": 83,
+      "Protein": 1,
+      "Fat": 0,
+      "SaturatedFattyAcid": 0,
+      "PolyUnsaturatedFattyAcid": null,
+      "MonoUnsaturatedFattyAcid": null,
+      "Omega3FattyAcid": null,
+      "Omega6FattyAcid": null,
+      "LinoleicAcid": null,
+      "TransFattyAcid": null,
+      "Cholesterol": null,
+      "Carbohydrates": 19,
+      "Sugar": 16,
+      "Starch": null,
+      "Fiber": 2,
+      "Water": null,
+      "Sodium": 0,
+      "Potassium": null,
+      "Calcium": null,
+      "Phosphor": null,
+      "Magnesium": null,
+      "Iron": null,
+      "Copper": null,
+      "Zinc": null,
+      "Iodine": null,
+      "Selenium": null,
+      "VitaminA": null,
+      "VitaminB1": null,
+      "VitaminB2": null,
+      "VitaminB12": null,
+      "Folate": null,
+      "VitaminC": null,
+      "VitaminD": null,
+      "VitaminE": null
+    }
+  },
+  "amount": 126,
+  "timestamp": {
+    "$date": "2023-06-26T22:00:00.000Z"
+  },
+  "userInfoId": "647487d2f7811144213c8ee5"
+},
+{
+  "_id": {
+    "$oid": "649af6efe422cf09d426a0c5"
+  },
+  "meal": "Breakfast",
+  "product": {
+    "_id": {
+      "$oid": "649af6b4e422cf09d426a0c4"
+    },
+    "name": "Oikos Blueberry Cheesecake"
+  },
+  "servingSize": {
+    "grams": 1,
+    "name": "Gram"
+  },
+  "preparation": {
+    "_id": {
+      "$oid": "649af6b4e422cf09d426a0c3"
+    },
+    "name": "Onbereid",
+    "nutrients": {
+      "Energy": 156,
+      "Protein": 3,
+      "Fat": 8,
+      "SaturatedFattyAcid": 5,
+      "PolyUnsaturatedFattyAcid": null,
+      "MonoUnsaturatedFattyAcid": null,
+      "Omega3FattyAcid": null,
+      "Omega6FattyAcid": null,
+      "LinoleicAcid": null,
+      "TransFattyAcid": null,
+      "Cholesterol": null,
+      "Carbohydrates": 17,
+      "Sugar": 16,
+      "Starch": null,
+      "Fiber": 1,
+      "Water": null,
+      "Sodium": 54,
+      "Potassium": null,
+      "Calcium": null,
+      "Phosphor": null,
+      "Magnesium": null,
+      "Iron": null,
+      "Copper": null,
+      "Zinc": null,
+      "Iodine": null,
+      "Selenium": null,
+      "VitaminA": null,
+      "VitaminB1": null,
+      "VitaminB2": null,
+      "VitaminB12": null,
+      "Folate": null,
+      "VitaminC": null,
+      "VitaminD": null,
+      "VitaminE": null
+    }
+  },
+  "amount": 115,
+  "timestamp": {
+    "$date": "2023-06-26T22:00:00.000Z"
+  },
+  "userInfoId": "647487d2f7811144213c8ee5"
+},
+{
+  "_id": {
+    "$oid": "649be91d167ae6404db65f55"
+  },
+  "meal": "Breakfast",
+  "product": {
+    "_id": {
+      "$oid": "649be910167ae6404db65f54"
+    },
+    "name": "Broodje Smos"
+  },
+  "servingSize": {
+    "grams": 1,
+    "name": "Gram"
+  },
+  "preparation": {
+    "_id": {
+      "$oid": "649be910167ae6404db65f53"
+    },
+    "name": "Onbereid",
+    "nutrients": {
+      "Energy": null,
+      "Protein": null,
+      "Fat": null,
+      "SaturatedFattyAcid": null,
+      "PolyUnsaturatedFattyAcid": null,
+      "MonoUnsaturatedFattyAcid": null,
+      "Omega3FattyAcid": null,
+      "Omega6FattyAcid": null,
+      "LinoleicAcid": null,
+      "TransFattyAcid": null,
+      "Cholesterol": null,
+      "Carbohydrates": null,
+      "Sugar": null,
+      "Starch": null,
+      "Fiber": null,
+      "Water": null,
+      "Sodium": null,
+      "Potassium": null,
+      "Calcium": null,
+      "Phosphor": null,
+      "Magnesium": null,
+      "Iron": null,
+      "Copper": null,
+      "Zinc": null,
+      "Iodine": null,
+      "Selenium": null,
+      "VitaminA": null,
+      "VitaminB1": null,
+      "VitaminB2": null,
+      "VitaminB12": null,
+      "Folate": null,
+      "VitaminC": null,
+      "VitaminD": null,
+      "VitaminE": null
+    }
+  },
+  "amount": 400,
+  "timestamp": {
+    "$date": "2023-06-27T22:00:00.000Z"
+  },
+  "userInfoId": "647487d2f7811144213c8ee5"
+},
+{
+  "_id": {
+    "$oid": "649c3284167ae6404db65f56"
+  },
+  "meal": "Breakfast",
+  "product": {
+    "_id": {
+      "$oid": "649af408e422cf09d426a0c1"
+    },
+    "name": "Banaan"
+  },
+  "servingSize": {
+    "grams": 1,
+    "name": "Gram"
+  },
+  "preparation": {
+    "_id": {
+      "$oid": "649af408e422cf09d426a0c0"
+    },
+    "name": "Onbereid",
+    "nutrients": {
+      "Energy": 83,
+      "Protein": 1,
+      "Fat": 0,
+      "SaturatedFattyAcid": 0,
+      "PolyUnsaturatedFattyAcid": null,
+      "MonoUnsaturatedFattyAcid": null,
+      "Omega3FattyAcid": null,
+      "Omega6FattyAcid": null,
+      "LinoleicAcid": null,
+      "TransFattyAcid": null,
+      "Cholesterol": null,
+      "Carbohydrates": 19,
+      "Sugar": 16,
+      "Starch": null,
+      "Fiber": 2,
+      "Water": null,
+      "Sodium": 0,
+      "Potassium": null,
+      "Calcium": null,
+      "Phosphor": null,
+      "Magnesium": null,
+      "Iron": null,
+      "Copper": null,
+      "Zinc": null,
+      "Iodine": null,
+      "Selenium": null,
+      "VitaminA": null,
+      "VitaminB1": null,
+      "VitaminB2": null,
+      "VitaminB12": null,
+      "Folate": null,
+      "VitaminC": null,
+      "VitaminD": null,
+      "VitaminE": null
+    }
+  },
+  "amount": 120,
+  "timestamp": {
+    "$date": "2023-06-27T22:00:00.000Z"
+  },
+  "userInfoId": "647487d2f7811144213c8ee5"
+}]

@@ -1,5 +1,6 @@
 package be.ehb.gdt.nutrisearch.domain.study.repositories
 
+import be.ehb.gdt.nutrisearch.domain.consumption.entities.Consumption
 import be.ehb.gdt.nutrisearch.domain.study.entities.Study
 import be.ehb.gdt.nutrisearch.domain.study.valueobjects.UpdatableStudy
 import java.time.LocalDate
@@ -16,4 +17,5 @@ interface StudyRepository {
     fun deleteStudy(id: String)
     fun hardDeleteStudy(id: String)
     fun existsById(id: String): Boolean
+    fun findConsumptionsByStudyId(id: String, timestamp: LocalDate): List<Consumption>
 }

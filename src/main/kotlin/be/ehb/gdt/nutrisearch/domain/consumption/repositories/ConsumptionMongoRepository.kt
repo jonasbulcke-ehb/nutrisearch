@@ -11,13 +11,15 @@ import java.time.LocalDate
 class ConsumptionMongoRepository(val mongoTemplate: MongoTemplate) : ConsumptionRepository {
 
     override fun findConsumptionsByTimestampAndUserInfoId(timestamp: LocalDate, userInfoId: String): List<Consumption> {
-        val query = Query.query(Criteria.where("timestamp").`is`(timestamp).and("userInfoId").`is`(userInfoId))
+        val query = Query(Criteria.where("timestamp").`is`(timestamp.toString()).and("userInfoId").`is`(userInfoId))
         return mongoTemplate.find(query, Consumption::class.java)
     }
 
     override fun findConsumptionById(id: String) = mongoTemplate.findById(id, Consumption::class.java)
 
-    override fun saveConsumption(consumption: Consumption) = mongoTemplate.save(consumption)
+    override fun saveConsumption(consumption: Consumption): Consumption {
+        return mongoTemplate.save(consumption)
+    }
 
     override fun deleteConsumption(id: String) {
         val query = Query(Criteria.where("_id").`is`(id))

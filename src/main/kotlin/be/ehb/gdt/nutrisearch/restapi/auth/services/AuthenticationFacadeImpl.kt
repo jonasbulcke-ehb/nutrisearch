@@ -10,6 +10,9 @@ class AuthenticationFacadeImpl : AuthenticationFacade {
     override val authentication: Authentication
         get() = SecurityContextHolder.getContext().authentication
 
+    override val authId: String
+        get() = authentication.name
+
     override fun isInRole(role: String): Boolean {
         val authority =
             if (role.contains("ROLE_")) SimpleGrantedAuthority(role) else SimpleGrantedAuthority("ROLE_$role")

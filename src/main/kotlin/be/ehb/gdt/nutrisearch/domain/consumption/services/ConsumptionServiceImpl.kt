@@ -7,6 +7,7 @@ import be.ehb.gdt.nutrisearch.domain.exceptions.ResourceDoesNotMatchIdException
 import be.ehb.gdt.nutrisearch.domain.exceptions.ResourceNotFoundException
 import be.ehb.gdt.nutrisearch.domain.userinfo.exceptions.NoUserInfoForAuthenticationFound
 import be.ehb.gdt.nutrisearch.domain.userinfo.repositories.UserInfoRepository
+import be.ehb.gdt.nutrisearch.excel.UserConsumptionsExcelWriter
 import be.ehb.gdt.nutrisearch.restapi.auth.services.AuthenticationFacade
 import org.springframework.stereotype.Component
 import java.io.OutputStream
@@ -73,11 +74,10 @@ class ConsumptionServiceImpl(
         consumptionRepo.deleteConsumption(id)
     }
 
-    override fun exportToExcel(timestamp: LocalDate, outputStream: OutputStream) {
-//        TODO("Use userInfoId instead of hard coded value")
-        val consumptions =
-            consumptionRepo.findConsumptionsByTimestampAndUserInfoId(timestamp, "6489ce47c7f28f1ddbddb029")
-        IndividualConsumptionsExcelWriter(consumptions, timestamp.toString()).write(outputStream)
+    override fun exportToExcel(timestamp: LocalDate, id: String, outputStream: OutputStream) {
+        consumptionRepo.findConsumptionsByTimestampAndUserInfoId(timestamp, id).also {
+            UserConsumptionsExcelWriter(it, timestamp.toString()).write(outputStream)
+        }
     }
 
     private fun getUserInfoId() =

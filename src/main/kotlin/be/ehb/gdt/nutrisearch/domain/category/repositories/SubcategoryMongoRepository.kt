@@ -2,6 +2,7 @@ package be.ehb.gdt.nutrisearch.domain.category.repositories
 
 import be.ehb.gdt.nutrisearch.domain.category.entities.Category
 import be.ehb.gdt.nutrisearch.domain.category.entities.Subcategory
+import org.bson.Document
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.aggregation.Aggregation
 import org.springframework.data.mongodb.core.aggregation.ProjectionOperation
@@ -50,17 +51,15 @@ class SubcategoryMongoRepository(private val mongoTemplate: MongoTemplate) : Sub
     }
 
     override fun countSubcategoriesByCategoryId(parentId: String): Int {
-        val field = "subcategories";
+        val field = "subcategories"
         val matchStage = Aggregation.match(Criteria.where("_id").`is`(parentId))
         val projectionOperation = ProjectionOperation().andExclude("_id").and(field).size()
         return mongoTemplate.aggregate(
             Aggregation.newAggregation(matchStage, projectionOperation),
             Category::class.java,
-            CountResult::class.java
-        ).uniqueMappedResult!!.value
+            Document::class.java
+        ).uniqueMappedResult!!.getInteger("subcategories")
     }
-
-    class CountResult(val key: String, val value: Int);
 
     companion object {
         private const val SUBCATEGORY_ID_KEY = "subcategories._id"

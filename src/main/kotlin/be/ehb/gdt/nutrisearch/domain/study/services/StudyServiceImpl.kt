@@ -1,16 +1,20 @@
 package be.ehb.gdt.nutrisearch.domain.study.services
 
+import be.ehb.gdt.nutrisearch.domain.consumption.entities.Consumption
+import be.ehb.gdt.nutrisearch.domain.exceptions.AlreadyParticipatingInActiveStudyException
 import be.ehb.gdt.nutrisearch.domain.exceptions.ResourceDoesNotMatchIdException
 import be.ehb.gdt.nutrisearch.domain.exceptions.ResourceNotFoundException
 import be.ehb.gdt.nutrisearch.domain.study.entities.Study
 import be.ehb.gdt.nutrisearch.domain.study.repositories.StudyRepository
 import be.ehb.gdt.nutrisearch.domain.study.valueobjects.UpdatableStudy
+import be.ehb.gdt.nutrisearch.domain.userinfo.entities.UserInfo
 import be.ehb.gdt.nutrisearch.domain.userinfo.exceptions.NoUserInfoForAuthenticationFound
 import be.ehb.gdt.nutrisearch.domain.userinfo.repositories.UserInfoRepository
+import be.ehb.gdt.nutrisearch.excel.StudyConsumptionsExcelWriter
 import be.ehb.gdt.nutrisearch.restapi.auth.services.AuthenticationFacade
 import org.springframework.stereotype.Service
+import java.io.OutputStream
 import java.time.LocalDate
-import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.Study as StudyValueObject
 
 @Service
 class StudyServiceImpl(
@@ -44,14 +48,10 @@ class StudyServiceImpl(
     override fun joinStudy(id: String) {
         val userInfo = userInfoRepo.findUserInfoByAuthId(authFacade.authentication.name)
             ?: throw NoUserInfoForAuthenticationFound()
-        if (userInfo.currentStudy?.isActive == true) {
-            throw RuntimeException("User cannot participate in more then one study at the same time")
+        val currentStudy = userInfoRepo.findCurrentStudyById(id)
+        if (currentStudy?.isActive == true) {
+            throw AlreadyParticipatingInActiveStudyException(userInfo.id, currentStudy.id)
         }
-        val study = studyRepo.findStudy(id) ?: throw ResourceNotFoundException(Study::class.java, id)
-        userInfoRepo.updateCurrentStudy(
-            userInfo.id,
-            study.let { StudyValueObject(it.id, it.subject, it.startDate, it.endDate) }
-        )
         studyRepo.addParticipant(id, userInfo.id)
     }
 
@@ -61,7 +61,6 @@ class StudyServiceImpl(
         if (!studyRepo.existsById(id)) {
             throw ResourceNotFoundException(Study::class.java, id)
         }
-        userInfoRepo.clearCurrentStudy(userInfoId)
         studyRepo.deleteParticipant(id, userInfoId)
     }
 
@@ -69,10 +68,27 @@ class StudyServiceImpl(
         if (!studyRepo.existsById(id)) {
             throw ResourceNotFoundException(Study::class.java, id)
         }
-        studyRepo.updateEndDate(id, LocalDate.now());
+        studyRepo.updateEndDate(id, LocalDate.now())
     }
 
     override fun deleteStudy(id: String) {
         studyRepo.deleteStudy(id)
     }
+
+    override fun exportToExcel(id: String, timestamp: LocalDate, outputStream: OutputStream) {
+        if (!studyRepo.existsById(id)) {
+            throw ResourceNotFoundException(Study::class.java, id)
+        }
+        val consumptions = studyRepo.findConsumptionsByStudyId(id, timestamp).groupBy { it.userInfoId }
+        studyRepo.findStudy(id)!!.participants.associateWith { consumptions.getOrDefault(it.id, listOf()) }.also {
+            StudyConsumptionsExcelWriter(it, timestamp.toString()).write(outputStream)
+        }
+    }
+
+    override fun getConsumptions(id: String, timestamp: LocalDate): List<Consumption> {
+        return studyRepo.findConsumptionsByStudyId(id, timestamp)
+    }
+
+    override fun getParticipants(id: String): List<UserInfo> =
+        studyRepo.findStudy(id)?.participants ?: throw ResourceNotFoundException("Study", id)
 }

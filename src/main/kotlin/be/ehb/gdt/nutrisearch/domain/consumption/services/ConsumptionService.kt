@@ -10,5 +10,5 @@ interface ConsumptionService {
     fun createConsumption(consumption: Consumption): Consumption
     fun updateConsumption(id: String, consumption: Consumption)
     fun deleteConsumption(id: String)
-    fun exportToExcel(timestamp: LocalDate, outputStream: OutputStream)
+    fun exportToExcel(timestamp: LocalDate, id: String, outputStream: OutputStream)
 }

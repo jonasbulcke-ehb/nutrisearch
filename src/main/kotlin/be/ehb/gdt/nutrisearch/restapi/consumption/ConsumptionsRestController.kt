@@ -35,13 +35,13 @@ class ConsumptionsRestController(private val service: ConsumptionService) {
     fun deleteConsumption(@PathVariable id: String) = service.deleteConsumption(id)
 
     @GetMapping("/export-to-excel")
-    fun exportConsumptions(@RequestParam timestamp: LocalDate, response: HttpServletResponse) {
+    fun exportConsumptions(@RequestParam timestamp: LocalDate, @RequestParam("user-info-id") userInfoId: String, response: HttpServletResponse) {
         val currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HHmmss"))
         response.apply {
             contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE
             setHeader("Content-Disposition", "attachment; filename= $currentTime.xlsx")
         }.also {
-            service.exportToExcel(timestamp, response.outputStream)
+            service.exportToExcel(timestamp, userInfoId, response.outputStream)
         }
     }
 }

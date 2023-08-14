@@ -4,3 +4,5 @@ spring:
       uri: "mongodb://localhost:27017"
       database: "nutrisearch"
       auto-index-creation: true
+firebase:
+  refresh-token-path: "/Users/jonas/Documents/BATI/2022_2023/Final_Work/nutrisearch-5321f-firebase-adminsdk-1hbav-969c3779d7.json"

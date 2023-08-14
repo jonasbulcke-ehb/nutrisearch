@@ -6,7 +6,7 @@ import org.bson.types.ObjectId
 
 class Preparation(
     val name: String,
-    val nutrients: Map<Nutrient, Int?> = emptyMap(),
+    val nutrients: Map<Nutrient, Double?> = emptyMap(),
     val id: String = ObjectId.get().toHexString()
 ) {
     override fun equals(other: Any?): Boolean {

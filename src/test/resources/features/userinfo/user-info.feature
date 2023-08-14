@@ -21,13 +21,13 @@ Feature: UserInfoRestController
     Then I expect status 200
     And I expect the response body to contain boolean "false"
     Examples:
-      | userInfoId | authId | getResponse | hasUserInfo | postResponse | patchResponse | postWeightResponse | json                     |
-      | userinfo-1 | user   | 200         | true        | 400          | 200           | 204                | "userinfo/userinfo.json" |
-      | userinfo-2 | anon   | 403         | false       | 201          | 403           | 403                | nothing                  |
+      | userInfoId               | authId | getResponse | hasUserInfo | postResponse | patchResponse | postWeightResponse | json                     |
+      | 647487d2f7811144213c8ee5 | user   | 200         | true        | 400          | 200           | 204                | "userinfo/userinfo.json" |
+      | 6482f910c65bb8a676f5cd7d | anon   | 403         | false       | 201          | 403           | 403                | nothing                  |
 
 
   Scenario: GET userinfo with studies
-    Given an userInfo with id "userinfo-3" and authId "participant"
+    Given an userInfo with id "6488b28b2f05ad42d76be792" and authId "participant"
     And authenticated user with authId "participant"
     Given the following studies
       | subject   | startDate  | endDate    | id      |

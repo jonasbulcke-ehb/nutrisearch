@@ -1,10 +1,13 @@
 package be.ehb.gdt.nutrisearch.domain.userinfo.repositories
 
+import be.ehb.gdt.nutrisearch.domain.dietitians.entities.Dietitian
+import be.ehb.gdt.nutrisearch.domain.study.entities.Study
 import be.ehb.gdt.nutrisearch.domain.userinfo.entities.UserInfo
-import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.Study
 import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.UserUpdatableInfo
 import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.WeightMeasurement
 import org.springframework.data.mongodb.core.MongoTemplate
+import org.springframework.data.mongodb.core.aggregation.Aggregation
+import org.springframework.data.mongodb.core.aggregation.MatchOperation
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.core.query.Update
@@ -23,6 +26,45 @@ class UserInfoMongoRepository(private val mongoTemplate: MongoTemplate) : UserIn
     override fun findUserInfoIdByAuthId(authId: String): String? {
         val query = Query(Criteria.where("authId").`is`(authId))
         return mongoTemplate.findOne(query, UserInfo::class.java)?.id
+    }
+
+    override fun findCurrentStudyById(id: String): Study? {
+        val matchStage = Aggregation.match(Criteria.where("_id").`is`(id))
+        return findCurrentStudy(matchStage)
+    }
+
+    override fun findCurrentStudyByAuthId(authId: String): Study? {
+        val matchStage = Aggregation.match(Criteria.where("authId").`is`(authId))
+        return findCurrentStudy(matchStage)
+    }
+
+    override fun findTreatmentTeamByAuthId(authId: String): List<Dietitian> {
+        val matchStage = Aggregation.match(Criteria.where("authId").`is`(authId))
+        val lookupStage = Aggregation.lookup("dietitians", "treatmentTeam", "_id", "treatmentTeam")
+        val unwindStage = Aggregation.unwind("treatmentTeam")
+        val replaceRootStage = Aggregation.replaceRoot("treatmentTeam")
+        return mongoTemplate.aggregate(
+            Aggregation.newAggregation(matchStage, lookupStage, unwindStage, replaceRootStage),
+            UserInfo::class.java,
+            Dietitian::class.java
+        ).mappedResults
+    }
+
+    override fun findPatientsById(id: String): List<UserInfo> {
+        val query = Query(Criteria.where("treatmentTeam").`is`(id).and("authId").ne(null))
+        return mongoTemplate.find(query, UserInfo::class.java)
+    }
+
+    override fun insertIdToTreatmentTeam(authId: String, id: String) {
+        val query = Query(Criteria.where("authId").`is`(authId))
+        val update = Update().push("treatmentTeam", id)
+        mongoTemplate.updateFirst(query, update, UserInfo::class.java)
+    }
+
+    override fun deleteIdFromTreatmentTeam(authId: String, id: String) {
+        val query = Query(Criteria.where("authId").`is`(authId))
+        val update = Update().pull("treatmentTeam", id)
+        mongoTemplate.updateFirst(query, update, UserInfo::class.java)
     }
 
     override fun insertUserInfo(userInfo: UserInfo) = mongoTemplate.insert(userInfo)
@@ -47,18 +89,6 @@ class UserInfoMongoRepository(private val mongoTemplate: MongoTemplate) : UserIn
         mongoTemplate.updateFirst(query, update, UserInfo::class.java)
     }
 
-    override fun updateCurrentStudy(userInfoId: String, study: Study) {
-        val query = Query(Criteria.where("_id").`is`(userInfoId))
-        val update = Update().set("currentStudy", study)
-        mongoTemplate.updateFirst(query, update, UserInfo::class.java)
-    }
-
-    override fun clearCurrentStudy(userInfoId: String) {
-        val query = Query(Criteria.where("_id").`is`(userInfoId))
-        val update = Update().unset("currentStudy")
-        mongoTemplate.updateFirst(query, update, UserInfo::class.java)
-    }
-
     override fun deleteUserInfoByAuthId(authId: String) {
         val query = Query(Criteria.where("authId").`is`(authId))
         val update = Update().unset("authId")
@@ -79,5 +109,16 @@ class UserInfoMongoRepository(private val mongoTemplate: MongoTemplate) : UserIn
     override fun existUserInfoByAuthId(authId: String): Boolean {
         val query = Query(Criteria.where("authId").`is`(authId))
         return mongoTemplate.exists(query, UserInfo::class.java)
+    }
+
+    private fun findCurrentStudy(matchStage: MatchOperation): Study? {
+        val lookupStage = Aggregation.lookup("studies", "_id", "participants", "studies")
+        val unwindStage = Aggregation.unwind("studies")
+        val replaceRootStage = Aggregation.replaceRoot("studies")
+        return mongoTemplate.aggregate(
+            Aggregation.newAggregation(matchStage, lookupStage, unwindStage, replaceRootStage),
+            UserInfo::class.java,
+            Study::class.java
+        ).mappedResults.firstOrNull { it.isActive }
     }
 }
