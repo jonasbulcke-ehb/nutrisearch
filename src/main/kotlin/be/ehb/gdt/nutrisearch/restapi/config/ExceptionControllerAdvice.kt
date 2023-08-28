@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 @ControllerAdvice
 class ExceptionControllerAdvice {
 
-    @ExceptionHandler
-    fun handleIllegalStateException(e: IllegalStateException): ResponseEntity<Unit> {
+    @ExceptionHandler(value = [IllegalStateException::class, IllegalArgumentException::class])
+    fun handleIllegalStateException(e: RuntimeException): ResponseEntity<Unit> {
         return ResponseEntity.badRequest().build()
     }
 }

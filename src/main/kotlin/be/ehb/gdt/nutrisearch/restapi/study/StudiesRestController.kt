@@ -64,5 +64,4 @@ class StudiesRestController(private val service: StudyService) {
 
     @GetMapping("/{id}/participants")
     fun getParticipants(@PathVariable id: String) = service.getParticipants(id)
-
 }

@@ -1,0 +1,107 @@
+[
+  {
+    "name": "Granola",
+    "categoryId": "648c65e0ffe0154edf7cddfb",
+    "isVerified": false,
+    "preparations": [
+      {
+        "name": "Onbereid",
+        "nutrients": {
+          "Carbohydrates": 66
+        }
+      }
+    ],
+    "servingSizes": [
+      {
+        "grams": 1,
+        "name": "Gram"
+      }
+    ]
+  },
+  {
+    "name": "Lijnzaad",
+    "categoryId": "648c6edcffe0154edf7cde07",
+    "isVerified": false,
+    "preparations": [
+      {
+        "name": "Onbereid",
+        "nutrients": {
+          "Fiber": 6
+        }
+      }
+    ],
+    "servingSizes": [
+      {
+        "grams": 1,
+        "name": "Gram"
+      }
+    ]
+  },
+  {
+    "name": "Sesamzaad",
+    "categoryId": "648c6edcffe0154edf7cde07",
+    "isVerified": false,
+    "preparations": [
+      {
+        "name": "Onbereid",
+        "nutrients": {
+          "Fiber": 4
+        }
+      }
+    ],
+    "servingSizes": [
+      {
+        "grams": 1,
+        "name": "Gram"
+      }
+    ]
+  },
+  {
+    "name": "Chiazaad",
+    "categoryId": "648c6edcffe0154edf7cde07",
+    "isVerified": false,
+    "preparations": [
+      {
+        "name": "Onbereid",
+        "nutrients": {
+          "Fiber": 9
+        }
+      },
+      {
+        "name": "Gestampt",
+        "nutrients": {
+          "Fiber": 15
+        }
+      }
+    ],
+    "servingSizes": [
+      {
+        "grams": 1,
+        "name": "Gram"
+      }
+    ]
+  },
+  {
+    "name": "Fruityoghurt",
+    "categoryId": "648b3f1b1def255d5420e02c",
+    "isVerified": false,
+    "preparations": [
+      {
+        "name": "Onbereid",
+        "nutrients": {
+          "Carbohydrates": 9.6
+        }
+      }
+    ],
+    "servingSizes": [
+      {
+        "grams": 1,
+        "name": "Gram"
+      },
+      {
+        "grams": 125,
+        "name": "Potje"
+      }
+    ]
+  }
+]

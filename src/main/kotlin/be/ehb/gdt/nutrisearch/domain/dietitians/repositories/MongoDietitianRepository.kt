@@ -1,7 +1,9 @@
 package be.ehb.gdt.nutrisearch.domain.dietitians.repositories
 
 import be.ehb.gdt.nutrisearch.domain.dietitians.entities.Dietitian
+import org.bson.types.ObjectId
 import org.springframework.data.mongodb.core.MongoTemplate
+import org.springframework.data.mongodb.core.aggregation.Aggregation
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.core.query.Update
@@ -39,5 +41,17 @@ class MongoDietitianRepository(private val mongoTemplate: MongoTemplate) : Dieti
     override fun existsByAuthId(authId: String): Boolean {
         val query = Query(Criteria.where("authId").`is`(authId))
         return mongoTemplate.exists(query, Dietitian::class.java)
+    }
+
+    override fun isTreatingPatient(authId: String, patientId: String): Boolean {
+        val matchAuthIdStage = Aggregation.match(Criteria.where("authId").`is`(authId))
+        val lookupStage = Aggregation.lookup("userinfo", "_id", "treatmentTeam", "patients")
+        val matchPatientId = Aggregation.match(Criteria.where("patients._id").`is`(ObjectId(patientId)))
+
+        return mongoTemplate.aggregate(
+            Aggregation.newAggregation(matchAuthIdStage, lookupStage, matchPatientId),
+            Dietitian::class.java,
+            Dietitian::class.java
+        ).uniqueMappedResult != null
     }
 }

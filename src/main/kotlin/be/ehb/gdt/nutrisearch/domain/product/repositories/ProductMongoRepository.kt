@@ -1,7 +1,9 @@
 package be.ehb.gdt.nutrisearch.domain.product.repositories
 
 import be.ehb.gdt.nutrisearch.domain.product.entities.Product
+import be.ehb.gdt.nutrisearch.domain.userinfo.entities.UserInfo
 import org.springframework.data.mongodb.core.MongoTemplate
+import org.springframework.data.mongodb.core.aggregation.Aggregation
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.core.query.Update
@@ -25,6 +27,10 @@ class ProductMongoRepository(private val mongoTemplate: MongoTemplate) : Product
 
     override fun saveProduct(product: Product): Product = mongoTemplate.save(product)
 
+    override fun insertProducts(products: List<Product>) {
+        mongoTemplate.insert(products, Product::class.java)
+    }
+
     override fun verifyProduct(id: String) {
         val query = Query(Criteria.where("_id").`is`(id))
         val update = Update().set("isVerified", true)
@@ -44,5 +50,18 @@ class ProductMongoRepository(private val mongoTemplate: MongoTemplate) : Product
     override fun belongsProductToOwnerId(id: String, ownerId: String): Boolean {
         val query = Query(Criteria.where("_id").`is`(id).and("ownerId").`is`(ownerId))
         return mongoTemplate.exists(query, Product::class.java)
+    }
+
+    override fun findFavoriteProductsByAuthId(authId: String) : List<Product> {
+        val matchStage = Aggregation.match(Criteria.where("authId").`is`(authId))
+        val lookupStage = Aggregation.lookup("products", "favoriteProductIds", "_id", "favoriteProducts")
+        val unwindStage = Aggregation.unwind("favoriteProducts")
+        val replaceRootStage = Aggregation.replaceRoot("favoriteProducts")
+
+        return mongoTemplate.aggregate(
+            Aggregation.newAggregation(matchStage, lookupStage, unwindStage, replaceRootStage),
+            UserInfo::class.java,
+            Product::class.java
+        ).mappedResults
     }
 }

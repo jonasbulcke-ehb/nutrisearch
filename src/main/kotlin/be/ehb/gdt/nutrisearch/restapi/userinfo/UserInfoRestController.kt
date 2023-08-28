@@ -6,6 +6,7 @@ import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.UserUpdatableInfo
 import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.WeightMeasurement
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
+import java.time.LocalDate
 
 @RestController
 @RequestMapping("/api/v1/userinfo")
@@ -45,4 +46,25 @@ class UserInfoRestController(private val service: UserInfoService) {
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteUserInfo() = service.deleteUserInfoByAuthId()
+
+    @GetMapping("/favorite-products")
+    fun getFavoriteProductIds() = service.getAuthenticatedUserInfo().favoriteProductIds
+
+
+    @PostMapping("/favorite-products/{productId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun postFavoriteProduct(@PathVariable productId: String) = service.addFavoriteProduct(productId)
+
+    @DeleteMapping("/favorite-products/{productId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun deleteFavoriteProduct(@PathVariable productId: String) = service.deleteFavoriteProduct(productId)
+
+    @GetMapping("/questionnaire/{date}")
+    fun getQuestionnaire(@PathVariable date: LocalDate) = service.getQuestionnaire(date)
+
+    @PutMapping("/questionnaire/{date}/answers/{answerId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun putAnswer(@PathVariable date: LocalDate, @PathVariable answerId: String, @RequestBody answer: String) {
+        service.addAnswerToQuestionnaire(date, answerId, answer)
+    }
 }

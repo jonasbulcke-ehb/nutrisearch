@@ -1,6 +1,7 @@
 package be.ehb.gdt.nutrisearch.restapi.patients
 
 import be.ehb.gdt.nutrisearch.domain.patients.services.PatientService
+import be.ehb.gdt.nutrisearch.domain.questionnaire.services.QuestionnaireService
 import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.NameRecord
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.MediaType
@@ -13,6 +14,7 @@ import java.time.format.DateTimeFormatter
 @RequestMapping("api/v1/patients")
 class PatientsRestController(
     private val service: PatientService,
+    private val questionnaireService: QuestionnaireService
 ) {
     @GetMapping
     fun getPatients(): List<NameRecord> = service.getPatients()
@@ -38,4 +40,8 @@ class PatientsRestController(
             service.exportConsumptionsToExcel(id, timestamp, response.outputStream)
         }
     }
+
+    @GetMapping("/{id}/questionnaire")
+    fun getQuestionnaire(@PathVariable id: String, @RequestParam date: LocalDate) =
+        questionnaireService.getQuestionnaire(id, date)
 }

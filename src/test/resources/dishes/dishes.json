@@ -1,0 +1,70 @@
+{
+  "name": "Standaard ontbijt",
+  "products": [
+    {
+      "id": {
+        "$oid": "64e234da334b0bbdd1a13215"
+      },
+      "name": "Granola",
+      "preparation": {
+        "name": "Onbereid",
+        "nutrients": {
+          "Carbohydrates": 66
+        }
+      },
+      "amount": 45
+    },
+    {
+      "id": {
+        "$oid": "64e234da334b0bbdd1a13216"
+      },
+      "name": "Lijnzaad",
+      "preparation": {
+        "name": "Onbereid",
+        "nutrients": {
+          "Fiber": 6
+        }
+      },
+      "amount": 10
+    },
+    {
+      "id": {
+        "$oid": "64e234da334b0bbdd1a13217"
+      },
+      "name": "Sesamzaad",
+      "preparation": {
+        "name": "Onbereid",
+        "nutrients": {
+          "Fiber": 4
+        }
+      },
+      "amount": 3
+    },
+    {
+      "id": {
+        "$oid": "64e234da334b0bbdd1a13218"
+      },
+      "name": "Chiazaad",
+      "preparation": {
+        "name": "Onbereid",
+        "nutrients": {
+          "Fiber": 9
+        }
+      },
+      "amount": 2
+    },
+    {
+      "id": {
+        "$oid": "64e234da334b0bbdd1a13219"
+      },
+      "name": "Fruityoghurt",
+      "preparation": {
+        "name": "Onbereid",
+        "nutrients": {
+          "Carbohydrates": 9.6
+        }
+      },
+      "amount": 125
+    }
+  ]
+}

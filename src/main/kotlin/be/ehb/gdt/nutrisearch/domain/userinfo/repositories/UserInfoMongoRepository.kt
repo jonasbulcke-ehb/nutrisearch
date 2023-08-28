@@ -5,6 +5,7 @@ import be.ehb.gdt.nutrisearch.domain.study.entities.Study
 import be.ehb.gdt.nutrisearch.domain.userinfo.entities.UserInfo
 import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.UserUpdatableInfo
 import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.WeightMeasurement
+import org.bson.types.ObjectId
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.aggregation.Aggregation
 import org.springframework.data.mongodb.core.aggregation.MatchOperation
@@ -50,7 +51,7 @@ class UserInfoMongoRepository(private val mongoTemplate: MongoTemplate) : UserIn
         ).mappedResults
     }
 
-    override fun findPatientsById(id: String): List<UserInfo> {
+    override fun findPatientsByDietitianId(id: String): List<UserInfo> {
         val query = Query(Criteria.where("treatmentTeam").`is`(id).and("authId").ne(null))
         return mongoTemplate.find(query, UserInfo::class.java)
     }
@@ -109,6 +110,18 @@ class UserInfoMongoRepository(private val mongoTemplate: MongoTemplate) : UserIn
     override fun existUserInfoByAuthId(authId: String): Boolean {
         val query = Query(Criteria.where("authId").`is`(authId))
         return mongoTemplate.exists(query, UserInfo::class.java)
+    }
+
+    override fun insertFavoriteProduct(authId: String, productId: String) {
+        val query = Query(Criteria.where("authId").`is`(authId))
+        val update = Update().push("favoriteProductIds", ObjectId(productId))
+        mongoTemplate.updateFirst(query, update, UserInfo::class.java)
+    }
+
+    override fun deleteFavoriteProduct(authId: String, productId: String) {
+        val query = Query(Criteria.where("authId").`is`(authId))
+        val update = Update().pull("favoriteProductIds", ObjectId(productId))
+        mongoTemplate.updateFirst(query, update, UserInfo::class.java)
     }
 
     private fun findCurrentStudy(matchStage: MatchOperation): Study? {

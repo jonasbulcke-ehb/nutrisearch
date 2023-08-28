@@ -13,7 +13,7 @@ interface UserInfoRepository {
     fun findCurrentStudyById(id: String): Study?
     fun findCurrentStudyByAuthId(authId: String): Study?
     fun findTreatmentTeamByAuthId(authId: String): List<Dietitian>
-    fun findPatientsById(id: String): List<UserInfo>
+    fun findPatientsByDietitianId(id: String): List<UserInfo>
     fun insertUserInfo(userInfo: UserInfo): UserInfo
     fun updateUserInfo(authId: String, userUpdatableInfo: UserUpdatableInfo)
     fun insertIdToTreatmentTeam(authId: String, id: String)
@@ -23,4 +23,6 @@ interface UserInfoRepository {
     fun existUserInfoById(id: String): Boolean
     fun existUserInfoByAuthId(authId: String): Boolean
     fun deleteIdFromTreatmentTeam(authId: String, id: String)
+    fun insertFavoriteProduct(authId: String, productId: String)
+    fun deleteFavoriteProduct(authId: String, productId: String)
 }

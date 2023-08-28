@@ -19,7 +19,6 @@ class Consumption(
     val servingSize: ServingSize,
     val preparation: Preparation,
     val amount: Double,
-//    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Field(targetType = FieldType.STRING)
     val timestamp: LocalDate,
     @Id val id: String = ObjectId.get().toHexString()

@@ -21,6 +21,10 @@ class ConsumptionMongoRepository(val mongoTemplate: MongoTemplate) : Consumption
         return mongoTemplate.save(consumption)
     }
 
+    override fun insertConsumptions(consumptions: List<Consumption>): Collection<Consumption> {
+        return mongoTemplate.insert(consumptions, Consumption::class.java)
+    }
+
     override fun deleteConsumption(id: String) {
         val query = Query(Criteria.where("_id").`is`(id))
         mongoTemplate.remove(query, Consumption::class.java)

@@ -10,4 +10,5 @@ interface ConsumptionRepository {
     fun deleteConsumption(id: String)
     fun existsConsumptionById(id: String): Boolean
     fun belongsConsumptionToUser(id: String, userInfoId: String): Boolean
+    fun insertConsumptions(consumptions: List<Consumption>): Collection<Consumption>
 }

@@ -13,6 +13,7 @@ class ProductRestControllerSteps : SpringIntegrationTest() {
     @DataTableType
     fun consumptionsTransformer(row: Map<String, String?>): Product {
         return Product(
+            null,
             row["name"]!!,
             row["categoryId"]!!,
             row["isVerified"]!!.toBooleanStrict(),

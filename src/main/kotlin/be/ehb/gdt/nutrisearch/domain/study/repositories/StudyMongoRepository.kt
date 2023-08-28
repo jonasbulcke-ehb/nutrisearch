@@ -1,9 +1,12 @@
 package be.ehb.gdt.nutrisearch.domain.study.repositories
 
 import be.ehb.gdt.nutrisearch.domain.consumption.entities.Consumption
+import be.ehb.gdt.nutrisearch.domain.questionnaire.entities.Questionnaire
+import be.ehb.gdt.nutrisearch.domain.questionnaire.valueobjects.Answer
 import be.ehb.gdt.nutrisearch.domain.study.entities.Study
 import be.ehb.gdt.nutrisearch.domain.study.valueobjects.UpdatableStudy
 import be.ehb.gdt.nutrisearch.domain.userinfo.entities.UserInfo
+import org.bson.Document
 import org.bson.types.ObjectId
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.aggregation.Aggregation
@@ -26,6 +29,16 @@ class StudyMongoRepository(private val mongoTemplate: MongoTemplate) : StudyRepo
         return Query(Criteria.where("_id").`is`(id)).let {
             mongoTemplate.findOne(it, Study::class.java)
         }
+    }
+
+    override fun findParticipantsIdsById(id: String): List<String>? {
+        val matchStage = Aggregation.match(Criteria.where("_id").`is`(id))
+        val projectStage = Aggregation.project("participants").andExclude("_id")
+        return mongoTemplate.aggregate(
+            Aggregation.newAggregation(matchStage, projectStage),
+            Study::class.java,
+            Document::class.java
+        ).uniqueMappedResult?.getList("participants", ObjectId::class.java)?.map(ObjectId::toHexString)
     }
 
     override fun findParticipatingStudy(authId: String): Study? {
@@ -61,7 +74,7 @@ class StudyMongoRepository(private val mongoTemplate: MongoTemplate) : StudyRepo
 
     override fun deleteParticipant(studyId: String, userInfoId: String) {
         val query = Query(Criteria.where("_id").`is`(studyId))
-        val update = Update().pull("participants", userInfoId)
+        val update = Update().pull("participants", ObjectId(userInfoId))
         mongoTemplate.updateFirst(query, update, Study::class.java)
     }
 
@@ -100,5 +113,21 @@ class StudyMongoRepository(private val mongoTemplate: MongoTemplate) : StudyRepo
             Study::class.java,
             Consumption::class.java
         ).mappedResults
+    }
+
+    override fun findAnswersByStudyId(id: String, date: LocalDate): Map<String, List<Answer>> {
+        val matchDateStage = Aggregation.match(Criteria.where("_id.date").`is`(date.toString()))
+        val projectStage = Aggregation.project("answers").and("_id.userinfoId").`as`("id")
+        val unwindStage = Aggregation.unwind("answers")
+        val matchStudyIdStage = Aggregation.match(Criteria.where("answers.studyId").`is`(ObjectId(id)))
+        val groupStage = Aggregation.group("id").addToSet("answers").`as`("answers")
+        return mongoTemplate.aggregate(
+            Aggregation.newAggregation(matchDateStage, projectStage, unwindStage, matchStudyIdStage, groupStage),
+            Questionnaire::class.java,
+            object {
+                lateinit var id: String
+                lateinit var answers: List<Answer>
+            }::class.java
+        ).mappedResults.associate { it.id to it.answers }
     }
 }

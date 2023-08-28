@@ -2,9 +2,12 @@ package be.ehb.gdt.nutrisearch.domain.consumption.services
 
 import be.ehb.gdt.nutrisearch.domain.consumption.entities.Consumption
 import be.ehb.gdt.nutrisearch.domain.consumption.repositories.ConsumptionRepository
+import be.ehb.gdt.nutrisearch.domain.consumption.valueobjects.DishConsumption
+import be.ehb.gdt.nutrisearch.domain.consumption.valueobjects.Product
 import be.ehb.gdt.nutrisearch.domain.exceptions.ForbiddenOperationException
 import be.ehb.gdt.nutrisearch.domain.exceptions.ResourceDoesNotMatchIdException
 import be.ehb.gdt.nutrisearch.domain.exceptions.ResourceNotFoundException
+import be.ehb.gdt.nutrisearch.domain.product.valueobjects.ServingSize
 import be.ehb.gdt.nutrisearch.domain.userinfo.exceptions.NoUserInfoForAuthenticationFound
 import be.ehb.gdt.nutrisearch.domain.userinfo.repositories.UserInfoRepository
 import be.ehb.gdt.nutrisearch.excel.UserConsumptionsExcelWriter
@@ -19,16 +22,18 @@ class ConsumptionServiceImpl(
     private val userInfoRepo: UserInfoRepository,
     private val authFacade: AuthenticationFacade
 ) : ConsumptionService {
+    private val userInfoId: String
+        get() = userInfoRepo.findUserInfoIdByAuthId(authFacade.authentication.name)
+            ?: throw NoUserInfoForAuthenticationFound()
 
     override fun getConsumptionsByTimestamp(timestamp: LocalDate): List<Consumption> {
-        val userInfoId = getUserInfoId()
         return consumptionRepo.findConsumptionsByTimestampAndUserInfoId(timestamp, userInfoId)
     }
 
     override fun getConsumptionById(id: String): Consumption {
         val consumption =
             consumptionRepo.findConsumptionById(id) ?: throw ResourceNotFoundException(Consumption::class.java, id)
-        if (consumption.userInfoId != getUserInfoId() && !authFacade.isInRole("dietitian")) {
+        if (consumption.userInfoId != userInfoId && !authFacade.isInRole("dietitian")) {
             throw ForbiddenOperationException("Forbidden to retrieve consumption with id $id")
         }
         return consumption
@@ -36,7 +41,7 @@ class ConsumptionServiceImpl(
 
     override fun createConsumption(consumption: Consumption): Consumption {
         return consumption.apply {
-            userInfoId = getUserInfoId()
+            userInfoId = this@ConsumptionServiceImpl.userInfoId
         }.also {
             consumptionRepo.saveConsumption(it)
         }
@@ -51,22 +56,18 @@ class ConsumptionServiceImpl(
             throw ResourceNotFoundException(Consumption::class.java, id)
         }
 
-        val userInfoId = getUserInfoId()
-
         if (!consumptionRepo.belongsConsumptionToUser(id, userInfoId)) {
             throw ForbiddenOperationException("Forbidden to modify consumption with id $id")
         }
 
         consumption.apply {
-            this.userInfoId = userInfoId
+            userInfoId = this@ConsumptionServiceImpl.userInfoId
         }.also {
             consumptionRepo.saveConsumption(it)
         }
     }
 
     override fun deleteConsumption(id: String) {
-        val userInfoId = getUserInfoId()
-
         if (!consumptionRepo.belongsConsumptionToUser(id, userInfoId)) {
             throw ForbiddenOperationException("Forbidden to delete consumption with id $id")
         }
@@ -80,6 +81,21 @@ class ConsumptionServiceImpl(
         }
     }
 
-    private fun getUserInfoId() =
-        userInfoRepo.findUserInfoIdByAuthId(authFacade.authentication.name) ?: throw NoUserInfoForAuthenticationFound()
+    override fun createConsumptionsFromDish(model: DishConsumption): List<Consumption> {
+        return model.dish.products.map {
+            Consumption(
+                model.meal,
+                Product(it.brand, it.name, it.id),
+                ServingSize(),
+                it.preparation,
+                it.amount * model.amount,
+                model.timestamp,
+            ).apply {
+                userInfoId = this@ConsumptionServiceImpl.userInfoId
+            }
+        }.also {
+            consumptionRepo.insertConsumptions(it)
+        }
+    }
+
 }

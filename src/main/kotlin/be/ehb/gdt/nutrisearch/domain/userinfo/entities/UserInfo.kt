@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.mapping.Field
 import org.springframework.data.mongodb.core.mapping.FieldType
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
 
 @Document("userinfo")
@@ -24,12 +25,21 @@ class UserInfo(
     val isBreastfeeding: Boolean = false,
     val weightMeasurements: List<WeightMeasurement> = listOf(),
     @JsonIgnore
+    val favoriteProductIds: Set<String> = mutableSetOf(),
+    @JsonIgnore
     val treatmentTeam: List<String> = listOf(),
-    @Id val id: String = ObjectId.get().toHexString()
+    @Id
+    val id: String = ObjectId.get().toHexString()
 ) {
     @JsonIgnore
     @Indexed
     var authId: String? = null
+
+    fun getWeight(timestamp: LocalDate) = getWeight(timestamp.atStartOfDay())
+
+    fun getWeight(timestamp: LocalDateTime) =
+        weightMeasurements.sortedBy { it.timestamp }.lastOrNull { it.timestamp.isBefore(timestamp) }?.value
+
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

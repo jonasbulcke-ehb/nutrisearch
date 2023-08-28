@@ -8,8 +8,10 @@ import be.ehb.gdt.nutrisearch.domain.product.repositories.ProductRepository
 import be.ehb.gdt.nutrisearch.domain.product.valueobjects.ServingSize
 import be.ehb.gdt.nutrisearch.domain.userinfo.exceptions.NoUserInfoForAuthenticationFound
 import be.ehb.gdt.nutrisearch.domain.userinfo.repositories.UserInfoRepository
+import be.ehb.gdt.nutrisearch.excel.ProductsExcelReader
 import be.ehb.gdt.nutrisearch.restapi.auth.services.AuthenticationFacade
 import org.springframework.stereotype.Service
+import java.io.InputStream
 
 @Service
 class ProductServiceImpl(
@@ -27,7 +29,7 @@ class ProductServiceImpl(
         return product.apply {
             servingSizes.add(ServingSize())
             isVerified = authFacade.isInRole("dietitian")
-            ownerId = getUserInfoId()
+            ownerId = if (authFacade.isInRole("dietitian")) null else getUserInfoId()
         }.also {
             repo.saveProduct(it)
         }
@@ -73,6 +75,16 @@ class ProductServiceImpl(
 
         repo.deleteProductById(id)
     }
+
+    override fun importProducts(categoryId: String, isVerified: Boolean, inputStream: InputStream) {
+        ProductsExcelReader
+            .from(inputStream)
+            .witProductDetails(categoryId, isVerified && authFacade.isInRole("dietitian"), ServingSize())
+            .readProducts()
+            .also { repo.insertProducts(it) }
+    }
+
+    override fun getFavoriteProducts() = repo.findFavoriteProductsByAuthId(authFacade.authId)
 
     private fun getUserInfoId() =
         userInfoRepo.findUserInfoIdByAuthId(authFacade.authentication.name) ?: throw NoUserInfoForAuthenticationFound()

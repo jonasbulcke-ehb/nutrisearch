@@ -2,6 +2,7 @@ package be.ehb.gdt.nutrisearch.restapi.consumption
 
 import be.ehb.gdt.nutrisearch.domain.consumption.entities.Consumption
 import be.ehb.gdt.nutrisearch.domain.consumption.services.ConsumptionService
+import be.ehb.gdt.nutrisearch.domain.consumption.valueobjects.DishConsumption
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -44,4 +45,9 @@ class ConsumptionsRestController(private val service: ConsumptionService) {
             service.exportToExcel(timestamp, userInfoId, response.outputStream)
         }
     }
+
+    @PostMapping("/from-dish")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun postConsumptionsFromDish(@RequestBody requestModel: DishConsumption) =
+        service.createConsumptionsFromDish(requestModel)
 }

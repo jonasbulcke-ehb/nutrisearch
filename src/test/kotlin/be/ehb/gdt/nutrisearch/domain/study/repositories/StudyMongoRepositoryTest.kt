@@ -60,7 +60,7 @@ class StudyMongoRepositoryTest {
                         .associateWith { nutrient -> node["preparation"]["nutrients"][nutrient.toString()].let { it?.asDouble() } }
                 Consumption(
                     Meal.valueOf(node["meal"].asText()),
-                    node["product"].let { Product(it["name"].asText(), it["_id"]["\$oid"].asText()) },
+                    node["product"].let { Product(null, it["name"].asText(), it["_id"]["\$oid"].asText()) },
                     node["servingSize"].let { ServingSize(it["grams"].asInt(), it["name"].asText()) },
                     node["preparation"].let {
                         Preparation(

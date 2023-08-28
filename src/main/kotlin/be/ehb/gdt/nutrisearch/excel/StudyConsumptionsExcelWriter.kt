@@ -2,21 +2,29 @@ package be.ehb.gdt.nutrisearch.excel
 
 import be.ehb.gdt.nutrisearch.domain.consumption.entities.Consumption
 import be.ehb.gdt.nutrisearch.domain.product.valueobjects.Nutrient
+import be.ehb.gdt.nutrisearch.domain.questionnaire.valueobjects.Answer
 import be.ehb.gdt.nutrisearch.domain.userinfo.entities.UserInfo
 import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.Sex
 import be.ehb.gdt.nutrisearch.util.booleanToYesNo
 import be.ehb.gdt.nutrisearch.util.getActivityLevel
+import be.ehb.gdt.nutrisearch.util.getMealName
+import java.time.LocalDate
 
 class StudyConsumptionsExcelWriter(
     private val consumptions: Map<UserInfo, List<Consumption>>,
-    sheetName: String? = null
-) :
-    ConsumptionsExcelWriter(sheetName) {
+    private val answers: Map<String, List<Answer>>,
+    private val date: LocalDate,
+) : ConsumptionsExcelWriter(date.toString()) {
+
+    private val answersLength: Int by lazy {
+        answers.values.first().size
+    }
+
     override fun fillWorkbook() {
         addHeaders(Nutrient.values().asList())
         consumptions.forEach { addUserConsumptionsRow(it.key, it.value) }
 
-        IntRange(0, 43).forEach(sheet::autoSizeColumn)
+        IntRange(0, 43 + answersLength).forEach(sheet::autoSizeColumn)
     }
 
     private fun addUserConsumptionsRow(userInfo: UserInfo, consumptions: List<Consumption>) {
@@ -26,11 +34,13 @@ class StudyConsumptionsExcelWriter(
 
         addTotalRow(amountsByNutrients, Nutrient.values().toList(), centerCellStyle)
         writeUserInfo(userInfo)
+        writeAnswers(answers[userInfo.id] ?: listOf())
     }
 
     override fun addHeaders(nutrients: List<Nutrient>) {
         super.addHeaders(nutrients)
         var cellIndex = Nutrient.values().size + 1
+        val answers = answers.values.first().sorted()
         sheet.getRow(rowIndex - 1).apply {
             for (i in 0 until 8) {
                 createCell(cellIndex + i).apply {
@@ -45,6 +55,12 @@ class StudyConsumptionsExcelWriter(
             }
             getCell(cellIndex + 4).apply {
                 setCellValue("kg/m^2")
+            }
+            answers.withIndex().forEach { (i, answer) ->
+                createCell(cellIndex + 8 + i).apply {
+                    setCellValue(answer.question.options?.joinToString("/"))
+                    cellStyle = headerUnitCellStyle
+                }
             }
         }
         sheet.getRow(rowIndex - 2).apply {
@@ -63,6 +79,12 @@ class StudyConsumptionsExcelWriter(
                     cellStyle = headerTitleCellStyle
                 }
             }
+            answers.forEach {
+                createCell(cellIndex++).apply {
+                    setCellValue(it.question.question + (it.meal?.let { meal -> " (${getMealName(meal)})" } ?: ""))
+                    cellStyle = headerTitleCellStyle
+                }
+            }
         }
     }
 
@@ -71,11 +93,9 @@ class StudyConsumptionsExcelWriter(
         sheet.getRow(rowIndex - 1).apply {
             createCell(cellIndex++).apply {
                 setCellValue(userInfo.dob)
-                workbook
                 cellStyle = centerCellStyle.copy().apply {
                     dataFormat = workbook.creationHelper.createDataFormat().getFormat("dd/MM/yyyy")
                 }
-
             }
             createCell(cellIndex++).apply {
                 setCellValue(getActivityLevel(userInfo.activityLevel))
@@ -86,7 +106,7 @@ class StudyConsumptionsExcelWriter(
                 cellStyle = centerCellStyle
             }
             createCell(cellIndex++).apply {
-                setCellValue(userInfo.weightMeasurements.last().value)
+                userInfo.getWeight(date)?.let { setCellValue(it) }
                 cellStyle = centerCellStyle
             }
             sheet.setColumnWidth(cellIndex, 4)
@@ -108,6 +128,20 @@ class StudyConsumptionsExcelWriter(
                 setCellValue(booleanToYesNo(userInfo.isBreastfeeding))
                 cellStyle = centerCellStyle
             }
+        }
+    }
+
+    private fun writeAnswers(answers: List<Answer>) {
+        val startCellIndex = Nutrient.values().size + 9
+        val sortedAnswers = answers.sorted()
+        sheet.getRow(rowIndex - 1).apply {
+            for (i in 0 until answersLength) {
+                createCell(startCellIndex + i).apply {
+                    setCellValue(sortedAnswers.getOrNull(i)?.answer)
+                    cellStyle = centerCellStyle
+                }
+            }
+
         }
     }
 }

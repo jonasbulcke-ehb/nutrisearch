@@ -2,8 +2,10 @@ package be.ehb.gdt.nutrisearch.restapi.product
 
 import be.ehb.gdt.nutrisearch.domain.product.entities.Product
 import be.ehb.gdt.nutrisearch.domain.product.services.ProductService
+import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
 
 @RestController
 @RequestMapping("/api/v1/products")
@@ -30,4 +32,18 @@ class ProductsRestController(private val service: ProductService) {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteProduct(@PathVariable id: String) = service.deleteProduct(id)
+
+    @PostMapping("/import-excel")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun importProducts(
+        @RequestParam(name = "category") categoryId: String,
+        @RequestParam(defaultValue = "false") isVerified: Boolean,
+        @RequestParam("products-excel-file") file: MultipartFile,
+        request: HttpServletRequest
+    ) {
+        service.importProducts(categoryId, isVerified, file.inputStream)
+    }
+
+    @GetMapping("/favorites")
+    fun getFavoriteProducts() = service.getFavoriteProducts()
 }

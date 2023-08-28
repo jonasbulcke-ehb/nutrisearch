@@ -19,7 +19,7 @@ class ConsumptionsRestControllerSteps : SpringIntegrationTest() {
 
     @DataTableType
     fun consumptionsTransformer(row: Map<String, String?>): Consumption {
-        val product = Product("Cornflakes", "my-cornflakes-id")
+        val product = Product(null, "Cornflakes", "my-cornflakes-id")
         val preparation = Preparation("Onbereid")
         val timestamp = LocalDate.parse(row["timestamp"])
         return Consumption(

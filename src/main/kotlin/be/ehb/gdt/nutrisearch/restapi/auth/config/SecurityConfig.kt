@@ -22,14 +22,20 @@ class SecurityConfig {
     fun corsConfigurer(): WebMvcConfigurer {
         return object : WebMvcConfigurer {
             override fun addCorsMappings(registry: CorsRegistry) {
-                registry.addMapping("/**").allowedOrigins("*").exposedHeaders(HttpHeaders.CONTENT_DISPOSITION)
+                registry
+                    .addMapping("/**")
+                    .allowedOrigins("*")
+                    .allowedMethods("*")
+                    .exposedHeaders(HttpHeaders.CONTENT_DISPOSITION)
             }
         }
     }
 
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
-        return http.csrf { it.disable() }
+        return http
+            .csrf { it.disable() }
+            .cors(Customizer.withDefaults())
             .exceptionHandling {
                 it.authenticationEntryPoint { _, response, _ ->
                     response.addHeader(HttpHeaders.WWW_AUTHENTICATE, "Basic realm=\"Restricted Content\"")

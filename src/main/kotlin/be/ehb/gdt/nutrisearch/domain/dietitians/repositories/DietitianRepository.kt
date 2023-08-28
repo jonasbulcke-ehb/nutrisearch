@@ -11,4 +11,5 @@ interface DietitianRepository {
     fun deleteDietitian(id: String)
     fun existsById(id: String): Boolean
     fun existsByAuthId(authId: String): Boolean
+    fun isTreatingPatient(authId: String, patientId: String): Boolean
 }

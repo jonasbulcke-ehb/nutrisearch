@@ -10,18 +10,25 @@ import org.springframework.data.mongodb.core.mapping.Document
 @Document("products")
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 class Product(
+    brand: String?,
     @Indexed
-    var name: String,
+    val name: String,
     @Indexed
-    var categoryId: String,
+    val categoryId: String,
     var isVerified: Boolean = false,
     val preparations: MutableList<Preparation> = mutableListOf(),
     val servingSizes: MutableSet<ServingSize> = mutableSetOf(),
     @Id
     val id: String = ObjectId.get().toHexString(),
 ) {
+    val brand: String?
+
     @Indexed
-    lateinit var ownerId: String
+    var ownerId: String? = null
+
+    init {
+        this.brand = if (brand?.isBlank() == true) null else brand
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
