@@ -38,6 +38,10 @@ class DishMongoRepository(private val mongoTemplate: MongoTemplate) : DishReposi
         Query(Criteria.where("_id").`is`(id)).let { mongoTemplate.remove(it, Dish::class.java) }
     }
 
+    override fun deleteDishesByUserinfoId(userinfoId: String) {
+        Query(Criteria.where("ownerId").`is`(userinfoId)).let { mongoTemplate.remove(it, Dish::class.java) }
+    }
+
     override fun existsById(id: String) =
         Query(Criteria.where("_id").`is`(id)).let { mongoTemplate.exists(it, Dish::class.java) }
 

@@ -1,7 +1,6 @@
 package be.ehb.gdt.nutrisearch.domain.category.services
 
 import be.ehb.gdt.nutrisearch.domain.category.entities.Subcategory
-import be.ehb.gdt.nutrisearch.domain.category.repositories.SubcategoryRepository
 import be.ehb.gdt.nutrisearch.domain.exceptions.ResourceNotFoundException
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach

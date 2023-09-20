@@ -8,7 +8,9 @@ import be.ehb.gdt.nutrisearch.domain.exceptions.ResourceNotFoundException
 import be.ehb.gdt.nutrisearch.domain.product.entities.Product
 import be.ehb.gdt.nutrisearch.domain.userinfo.exceptions.NoUserInfoForAuthenticationFound
 import be.ehb.gdt.nutrisearch.domain.userinfo.repositories.UserInfoRepository
+import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.UserinfoDeletedEvent
 import be.ehb.gdt.nutrisearch.restapi.auth.services.AuthenticationFacade
+import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
 
 @Service
@@ -77,6 +79,11 @@ class DishServiceImpl(
         }
 
         return dishRepo.findCompleteProducts(id)
+    }
+
+    @EventListener(UserinfoDeletedEvent::class)
+    fun handleUserinfoDeletedEvent(event: UserinfoDeletedEvent) {
+        dishRepo.deleteDishesByUserinfoId(event.userinfoId)
     }
 
 

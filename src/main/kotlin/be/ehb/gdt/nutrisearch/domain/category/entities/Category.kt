@@ -1,14 +1,10 @@
 package be.ehb.gdt.nutrisearch.domain.category.entities
 
 import org.bson.types.ObjectId
-import org.springframework.data.annotation.Id
-import org.springframework.data.mongodb.core.mapping.Document
 
-@Document("categories")
 class Category(
     val name: String,
     val subcategories: MutableList<Subcategory>,
-    @Id
     val id: String = ObjectId.get().toHexString()
 ) {
     override fun equals(other: Any?): Boolean {

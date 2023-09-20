@@ -1,4 +1,4 @@
-package be.ehb.gdt.nutrisearch.restapi.dietitians
+package be.ehb.gdt.nutrisearch.restapi.dietitians.config
 
 import be.ehb.gdt.nutrisearch.domain.dietitians.exceptions.DietitianRegistrationException
 import org.springframework.http.HttpHeaders

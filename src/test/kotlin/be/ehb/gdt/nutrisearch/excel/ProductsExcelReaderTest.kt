@@ -14,7 +14,7 @@ class ProductsExcelReaderTest {
         val categoryId = "test-category-id"
         val actualProducts =
             ResourceUtils.getFile("classpath:products/producten.xlsx").inputStream()
-                .let { ProductsExcelReader.from(it).readProducts(categoryId) }
+                .let { ProductsExcelReader.from(it).readProducts() }
 
         val nutrients1: MutableMap<Nutrient, Double?> =
             Nutrient.values().toMutableList()

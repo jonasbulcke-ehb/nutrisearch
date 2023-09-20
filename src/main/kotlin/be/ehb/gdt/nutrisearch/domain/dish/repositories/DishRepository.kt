@@ -10,6 +10,7 @@ interface DishRepository {
     fun saveDish(dish: Dish): Dish
     fun findCompleteProducts(id: String): List<Product>
     fun deleteDish(id: String)
+    fun deleteDishesByUserinfoId(userinfoId: String)
     fun existsById(id: String): Boolean
     fun belongsToUserInfoId(id: String, ownerId: String): Boolean
 }

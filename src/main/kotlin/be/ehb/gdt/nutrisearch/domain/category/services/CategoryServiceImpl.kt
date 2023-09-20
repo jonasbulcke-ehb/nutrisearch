@@ -15,7 +15,7 @@ class CategoryServiceImpl(private val repo: CategoryRepository) : CategoryServic
 
     override fun createCategory(category: Category): Category {
         check(category.subcategories.isNotEmpty()) { "Category needs to contain at least one subcategory" }
-        return repo.saveCategory(category)
+        return repo.insertCategory(category)
     }
 
     override fun updateCategory(id: String, category: Category) {
@@ -28,13 +28,13 @@ class CategoryServiceImpl(private val repo: CategoryRepository) : CategoryServic
         check(category.subcategories.isNotEmpty()) {
             "Category needs to contain at least one subcategory"
         }
-        repo.saveCategory(category)
+        repo.updateCategory(id, category.name)
     }
 
     override fun deleteCategory(id: String) {
         if (!repo.existsCategoryById(id)) {
             throw ResourceNotFoundException(Category::class.java, id)
         }
-        repo.deleteCategory(id)
+        repo.deleteCategoryById(id)
     }
 }

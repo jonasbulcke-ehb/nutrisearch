@@ -78,6 +78,12 @@ class StudyMongoRepository(private val mongoTemplate: MongoTemplate) : StudyRepo
         mongoTemplate.updateFirst(query, update, Study::class.java)
     }
 
+    override fun deleteParticipantInAllStudies(userInfoId: String) {
+        val query = Query(Criteria.where("participants").`is`(ObjectId(userInfoId)))
+        val update = Update().pull("participants", ObjectId(userInfoId))
+        mongoTemplate.updateMulti(query, update, Study::class.java)
+    }
+
     override fun deleteStudy(id: String) {
         val query = Query(Criteria.where("_id").`is`(id))
         val update = Update().set("isDeleted", true)

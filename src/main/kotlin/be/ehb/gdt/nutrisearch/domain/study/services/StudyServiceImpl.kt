@@ -14,9 +14,11 @@ import be.ehb.gdt.nutrisearch.domain.study.valueobjects.UpdatableStudy
 import be.ehb.gdt.nutrisearch.domain.userinfo.entities.UserInfo
 import be.ehb.gdt.nutrisearch.domain.userinfo.exceptions.NoUserInfoForAuthenticationFound
 import be.ehb.gdt.nutrisearch.domain.userinfo.repositories.UserInfoRepository
+import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.UserinfoDeletedEvent
 import be.ehb.gdt.nutrisearch.excel.StudyConsumptionsExcelWriter
 import be.ehb.gdt.nutrisearch.restapi.auth.services.AuthenticationFacade
 import org.springframework.context.ApplicationEventPublisher
+import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
 import java.io.OutputStream
 import java.time.LocalDate
@@ -98,6 +100,11 @@ class StudyServiceImpl(
 
     override fun getParticipants(id: String): List<UserInfo> =
         studyRepo.findStudy(id)?.participants ?: throw ResourceNotFoundException("Study", id)
+
+    @EventListener(UserinfoDeletedEvent::class)
+    fun handleUserinfoDeletedEvent(event: UserinfoDeletedEvent) {
+        studyRepo.deleteParticipantInAllStudies(event.userinfoId)
+    }
 
     private fun checkIfExists(id: String) {
         if (!studyRepo.existsById(id)) {

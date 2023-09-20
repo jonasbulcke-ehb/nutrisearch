@@ -29,7 +29,7 @@ class ProductServiceImpl(
         return product.apply {
             servingSizes.add(ServingSize())
             isVerified = authFacade.isInRole("dietitian")
-            ownerId = if (authFacade.isInRole("dietitian")) null else getUserInfoId()
+            ownerId = getUserInfoId()
         }.also {
             repo.saveProduct(it)
         }

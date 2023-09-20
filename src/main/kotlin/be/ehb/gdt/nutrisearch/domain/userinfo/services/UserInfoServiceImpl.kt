@@ -9,8 +9,10 @@ import be.ehb.gdt.nutrisearch.domain.userinfo.exceptions.MultipleUserInfoForAuth
 import be.ehb.gdt.nutrisearch.domain.userinfo.exceptions.NoUserInfoForAuthenticationFound
 import be.ehb.gdt.nutrisearch.domain.userinfo.repositories.UserInfoRepository
 import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.UserUpdatableInfo
+import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.UserinfoDeletedEvent
 import be.ehb.gdt.nutrisearch.domain.userinfo.valueobjects.WeightMeasurement
 import be.ehb.gdt.nutrisearch.restapi.auth.services.AuthenticationFacade
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 
@@ -19,6 +21,7 @@ class UserInfoServiceImpl(
     private val repo: UserInfoRepository,
     private val authFacade: AuthenticationFacade,
     private val questionnaireService: QuestionnaireService,
+    private val publisher: ApplicationEventPublisher,
 ) : UserInfoService {
 
     override fun getAuthenticatedUserInfo() =
@@ -60,6 +63,9 @@ class UserInfoServiceImpl(
 
     override fun deleteUserInfoByAuthId() {
         repo.deleteUserInfoByAuthId(authFacade.authId)
+        repo.findUserInfoIdByAuthId(authFacade.authId)
+            ?.let { UserinfoDeletedEvent(it) }
+            ?.also { publisher.publishEvent(it) }
     }
 
     override fun addToTreatmentTeam(riziv: String) {

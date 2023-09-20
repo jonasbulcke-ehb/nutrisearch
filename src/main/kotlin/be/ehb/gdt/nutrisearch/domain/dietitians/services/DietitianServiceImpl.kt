@@ -46,7 +46,6 @@ class DietitianServiceImpl(
                     firebaseAuth.updateUser(it)
                 }
             }
-
         }
 
         if (userRecord != null) {

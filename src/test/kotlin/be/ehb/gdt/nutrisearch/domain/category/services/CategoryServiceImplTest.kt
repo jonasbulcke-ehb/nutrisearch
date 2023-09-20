@@ -68,11 +68,11 @@ class CategoryServiceImplTest {
 
     @Test
     fun `when category does not exist then add category`() {
-        whenever(repo.saveCategory(any())).thenReturn(category)
+        whenever(repo.insertCategory(any())).thenReturn(category)
 
         val createdCategory = service.createCategory(category)
         assertEquals(category, createdCategory)
-        verify(repo).saveCategory(any())
+        verify(repo).insertCategory(any())
     }
 
     @Test
@@ -92,7 +92,7 @@ class CategoryServiceImplTest {
 
         val inOrder = inOrder(repo)
         inOrder.verify(repo).existsCategoryById(id)
-        inOrder.verify(repo).saveCategory(category)
+        inOrder.verify(repo).insertCategory(category)
     }
 
     @Test
@@ -111,6 +111,6 @@ class CategoryServiceImplTest {
         assertDoesNotThrow { service.deleteCategory(id) }
         val inOrder = inOrder(repo)
         inOrder.verify(repo).existsCategoryById(id)
-        inOrder.verify(repo).deleteCategory(id)
+        inOrder.verify(repo).deleteCategoryById(id)
     }
 }
