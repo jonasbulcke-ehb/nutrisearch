@@ -16,6 +16,7 @@ interface StudyRepository {
     fun updateEndDate(id: String, endDate: LocalDate)
     fun addParticipant(studyId: String, userInfoId: String)
     fun deleteParticipant(studyId: String, userInfoId: String)
+    fun deleteParticipantInAllStudies(userInfoId: String)
     fun deleteStudy(id: String)
     fun hardDeleteStudy(id: String)
     fun existsById(id: String): Boolean
